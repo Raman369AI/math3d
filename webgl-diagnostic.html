@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebGL Diagnostic</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #0a0a0f;
+            color: #f0f0f5;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        .success {
+            background: #064e3b;
+            border: 1px solid #10b981;
+        }
+
+        .error {
+            background: #7f1d1d;
+            border: 1px solid #ef4444;
+        }
+
+        .warning {
+            background: #713f12;
+            border: 1px solid #eab308;
+        }
+
+        h1 {
+            color: #6c5ce7;
+        }
+
+        pre {
+            background: #1a1a2e;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>WebGL Diagnostic Report</h1>
+    <div id="output"></div>
+
+    <script>
+        const output = document.getElementById('output');
+
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = message;
+            output.appendChild(div);
+        }
+
+        // Test 1: Check WebGL availability
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+        if (!gl) {
+            log('❌ <strong>WebGL is NOT available</strong><br>Your browser cannot create a WebGL context.', 'error');
+            log('Possible causes:<br>• WebGL is disabled in browser settings<br>• GPU drivers are not properly installed<br>• Hardware acceleration is disabled', 'warning');
+        } else {
+            log('✅ <strong>WebGL is available!</strong>', 'success');
+
+            // Get WebGL info
+            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+            if (debugInfo) {
+                const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+                const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+
+                log(`<strong>GPU Vendor:</strong> ${vendor}<br><strong>GPU Renderer:</strong> ${renderer}`, 'success');
+            }
+
+            log(`<strong>WebGL Version:</strong> ${gl.getParameter(gl.VERSION)}<br><strong>GLSL Version:</strong> ${gl.getParameter(gl.SHADING_LANGUAGE_VERSION)}`, 'success');
+
+            // Test 2: Check max texture size
+            const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+            log(`<strong>Max Texture Size:</strong> ${maxTextureSize}px`, maxTextureSize >= 4096 ? 'success' : 'warning');
+
+            // Test 3: Try to create a simple render
+            try {
+                gl.clearColor(0.2, 0.4, 0.8, 1.0);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                log('✅ <strong>WebGL rendering test passed!</strong>', 'success');
+            } catch (e) {
+                log(`❌ <strong>WebGL rendering test failed:</strong><br>${e.message}`, 'error');
+            }
+
+            // Test 4: Check for context loss
+            const loseContext = gl.getExtension('WEBGL_lose_context');
+            if (loseContext) {
+                log('✅ Context loss extension available', 'success');
+            }
+        }
+
+        // Test 5: Check browser info
+        log(`<strong>Browser:</strong> ${navigator.userAgent}`, 'info');
+        log(`<strong>Platform:</strong> ${navigator.platform}`, 'info');
+        log(`<strong>Hardware Concurrency:</strong> ${navigator.hardwareConcurrency} cores`, 'info');
+    </script>
+</body>
+
+</html>

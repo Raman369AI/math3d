@@ -1,0 +1,197 @@
+import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
+
+export interface Subtopic {
+    id: string;
+    title: string;
+    description: string;
+    component: LazyExoticComponent<ComponentType>;
+}
+
+export interface Topic {
+    id: string;
+    title: string;
+    icon: string;
+    color: string;
+    gradient: string;
+    subtopics: Subtopic[];
+}
+
+export const topics: Topic[] = [
+    {
+        id: 'linear-algebra',
+        title: 'Linear Algebra',
+        icon: '⊹',
+        color: '#6c5ce7',
+        gradient: 'linear-gradient(135deg, #6c5ce7, #a29bfe)',
+        subtopics: [
+            {
+                id: 'simple-test',
+                title: 'Simple Test (Debug)',
+                description: 'Minimal 3D scene with just a rotating cube — for testing WebGL functionality.',
+                component: lazy(() => import('../scenes/linear-algebra/SimpleTest')),
+            },
+            {
+                id: 'vector-operations',
+                title: 'Vector Operations',
+                description: 'Visualize vector addition, subtraction, scaling, and dot products in 3D space.',
+                component: lazy(() => import('../scenes/linear-algebra/VectorOperations')),
+            },
+            {
+                id: 'matrix-transformations',
+                title: 'Matrix Transformations',
+                description: 'See how matrices transform objects through rotation, scaling, and shearing.',
+                component: lazy(() => import('../scenes/linear-algebra/MatrixTransformations')),
+            },
+            {
+                id: 'eigenvalues',
+                title: 'Eigenvalues & Eigenvectors',
+                description: 'Explore eigenvectors that remain fixed in direction under linear transformations.',
+                component: lazy(() => import('../scenes/linear-algebra/Eigenvalues')),
+            },
+            {
+                id: 'fundamental-subspaces',
+                title: 'Fundamental Subspaces',
+                description: 'Visualize the 4 fundamental subspaces of a matrix — Row Space, Null Space, Column Space, and Left Null Space.',
+                component: lazy(() => import('../scenes/linear-algebra/FundamentalSubspaces')),
+            },
+            {
+                id: 'fundamental-subspaces-lite',
+                title: 'Fundamental Subspaces (Lite)',
+                description: 'Simplified version with lower GPU requirements - shows vector decomposition.',
+                component: lazy(() => import('../scenes/linear-algebra/FundamentalSubspacesLite')),
+            },
+            {
+                id: 'banach-tarski',
+                title: 'Banach-Tarski Paradox',
+                description: 'Witness the impossible: decompose one sphere into pieces that reassemble into two identical spheres.',
+                component: lazy(() => import('../scenes/linear-algebra/BanachTarski')),
+            },
+        ],
+    },
+    {
+        id: 'calculus',
+        title: 'Calculus',
+        icon: '∫',
+        color: '#00cec9',
+        gradient: 'linear-gradient(135deg, #00cec9, #81ecec)',
+        subtopics: [
+            {
+                id: 'derivatives',
+                title: 'Derivatives',
+                description: 'Visualize tangent lines and rate of change on 3D surfaces.',
+                component: lazy(() => import('../scenes/calculus/Derivatives')),
+            },
+            {
+                id: 'integrals',
+                title: 'Integrals',
+                description: 'See area accumulation and volume computation through integration.',
+                component: lazy(() => import('../scenes/calculus/Integrals')),
+            },
+            {
+                id: 'gradient-descent-calc',
+                title: 'Gradient Descent',
+                description: 'Watch optimization algorithms navigate the surface of a loss function.',
+                component: lazy(() => import('../scenes/calculus/GradientDescent')),
+            },
+            {
+                id: 'taylor-remainder',
+                title: 'Taylor Series Remainder',
+                description: 'Explore the Taylor series and visualize the error term (remainder) across different degrees.',
+                component: lazy(() => import('../scenes/calculus/TaylorRemainder')),
+            },
+            {
+                id: 'riemann-integral',
+                title: 'Riemann Integral',
+                description: 'Visualize domain partitioning and understand when Riemann integration breaks down.',
+                component: lazy(() => import('../scenes/calculus/RiemannIntegral')),
+            },
+            {
+                id: 'sigma-algebra',
+                title: 'σ-Algebra & Measure Theory',
+                description: 'Explore the mathematical "whitelist" that prevents paradoxes in integration and probability.',
+                component: lazy(() => import('../scenes/calculus/SigmaAlgebra')),
+            },
+            {
+                id: 'riemann-vs-lebesgue',
+                title: 'Riemann vs Lebesgue',
+                description: 'Compare how Riemann and Lebesgue integration handle functions with sharp spikes.',
+                component: lazy(() => import('../scenes/calculus/RiemannVsLebesgue')),
+            },
+            {
+                id: 'lebesgue-measure',
+                title: 'Lebesgue Measure Properties',
+                description: 'Understand the universal ruler: building blocks, outer measure, and why 2D planes have zero 3D volume.',
+                component: lazy(() => import('../scenes/calculus/LebesgueMeasure')),
+            },
+        ],
+    },
+    {
+        id: 'probability',
+        title: 'Probability',
+        icon: '⚄',
+        color: '#fd79a8',
+        gradient: 'linear-gradient(135deg, #fd79a8, #fab1a0)',
+        subtopics: [
+            {
+                id: 'distributions',
+                title: 'Distributions',
+                description: 'Explore probability distributions as 3D surfaces and curves.',
+                component: lazy(() => import('../scenes/probability/Distributions')),
+            },
+            {
+                id: 'bayes-theorem',
+                title: "Bayes' Theorem",
+                description: 'Visualize prior, likelihood, and posterior probabilities interactively.',
+                component: lazy(() => import('../scenes/probability/BayesTheorem')),
+            },
+            {
+                id: 'monte-carlo',
+                title: 'Monte Carlo',
+                description: 'Watch random sampling converge to true probability values.',
+                component: lazy(() => import('../scenes/probability/MonteCarlo')),
+            },
+        ],
+    },
+    {
+        id: 'ml',
+        title: 'Machine Learning',
+        icon: '⬡',
+        color: '#fdcb6e',
+        gradient: 'linear-gradient(135deg, #fdcb6e, #f39c12)',
+        subtopics: [
+            {
+                id: 'neural-networks',
+                title: 'Neural Networks',
+                description: 'Visualize network architectures, activations, and signal propagation.',
+                component: lazy(() => import('../scenes/ml/NeuralNetworks')),
+            },
+            {
+                id: 'decision-boundaries',
+                title: 'Decision Boundaries',
+                description: 'See how classifiers partition feature space into decision regions.',
+                component: lazy(() => import('../scenes/ml/DecisionBoundaries')),
+            },
+            {
+                id: 'gradient-descent-ml',
+                title: 'Gradient Descent',
+                description: 'Observe the optimization path through a high-dimensional loss landscape.',
+                component: lazy(() => import('../scenes/ml/GradientDescentML')),
+            },
+            {
+                id: 'measure-theory-ml',
+                title: 'Measure Theory in ML',
+                description: 'Why "size" and "sets" matter: Manifolds, Normalizing Flows, and ReLU singularities.',
+                component: lazy(() => import('../scenes/ml/MeasureTheoryML')),
+            },
+        ],
+    },
+];
+
+export function getTopicById(id: string): Topic | undefined {
+    return topics.find((t) => t.id === id);
+}
+
+export function getSubtopicById(topicId: string, subtopicId: string): Subtopic | undefined {
+    const topic = getTopicById(topicId);
+    return topic?.subtopics.find((s) => s.id === subtopicId);
+}
