@@ -2,7 +2,8 @@ import { useState, useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ShieldCheck, Zap, BookOpen, Scale } from 'lucide-react';
-import Latex from '../../components/Latex';
+import { useKatex } from '../../hooks/useKatex';
+import { Latex } from '../../components/Latex';
 
 type SigmaMode = 'atoms' | 'complement' | 'union' | 'universe';
 
@@ -114,6 +115,7 @@ function SigmaScene({ level, mode }: SigmaSceneProps) {
 export default function SigmaAlgebra() {
     const [sigmaLevel, setSigmaLevel] = useState(2);
     const [sigmaMode, setSigmaMode] = useState<SigmaMode>('atoms');
+    const katexLoaded = useKatex();
 
     const getModeDescription = () => {
         switch (sigmaMode) {

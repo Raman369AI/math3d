@@ -3,7 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Grid, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import { Info } from 'lucide-react';
-import Latex from '../../components/Latex';
+import { useKatex } from '../../hooks/useKatex';
+import { Latex } from '../../components/Latex';
 
 // --- Types ---
 type SceneType = 'manifold' | 'flows' | 'relu';
@@ -160,6 +161,7 @@ function ReLUScene({ isActive }: SceneProps) {
 // --- Main Component ---
 export default function MeasureTheoryML() {
     const [scene, setScene] = useState<SceneType>('manifold');
+    const katexLoaded = useKatex();
 
     const sceneData: Record<SceneType, { title: string; description: string; math: string; color: string }> = {
         manifold: {

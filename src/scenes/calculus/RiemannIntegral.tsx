@@ -3,7 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { Activity, Info } from 'lucide-react';
-import Latex from '../../components/Latex';
+import { useKatex } from '../../hooks/useKatex';
+import { Latex } from '../../components/Latex';
 
 interface RiemannSceneProps {
     nPartitions: number;
@@ -86,6 +87,7 @@ function RiemannScene({ nPartitions }: RiemannSceneProps) {
 
 export default function RiemannIntegral() {
     const [riemannN, setRiemannN] = useState(12);
+    const katexLoaded = useKatex();
 
     return (
         <div style={{ width: '100%', height: '100%', position: 'relative', background: '#0f172a' }}>
