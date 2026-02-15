@@ -10,7 +10,7 @@ const SPHERE_RADIUS = 2;
 interface SpherePieceProps {
     pieceId: number;
     setIndex: number;
-    animationProgress: number;
+    animationProgress: React.MutableRefObject<number>;
 }
 
 function SpherePiece({ pieceId, setIndex, animationProgress }: SpherePieceProps) {
@@ -42,28 +42,30 @@ function SpherePiece({ pieceId, setIndex, animationProgress }: SpherePieceProps)
     useFrame(() => {
         if (!meshRef.current) return;
 
+        const progress = animationProgress.current;
+
         // Position interpolation
-        meshRef.current.position.lerpVectors(startPos, targetPos, animationProgress);
+        meshRef.current.position.lerpVectors(startPos, targetPos, progress);
 
         // Rotation interpolation
         meshRef.current.rotation.x = THREE.MathUtils.lerp(
             startRot.x,
             targetRot.x,
-            animationProgress
+            progress
         );
         meshRef.current.rotation.y = THREE.MathUtils.lerp(
             startRot.y,
             targetRot.y,
-            animationProgress
+            progress
         );
         meshRef.current.rotation.z = THREE.MathUtils.lerp(
             startRot.z,
             targetRot.z,
-            animationProgress
+            progress
         );
 
         // Subtle scaling effect during transition
-        const s = 1 + Math.sin(animationProgress * Math.PI) * 0.1;
+        const s = 1 + Math.sin(progress * Math.PI) * 0.1;
         meshRef.current.scale.set(s, s, s);
 
         // Idle floating animation
@@ -84,7 +86,7 @@ function SpherePiece({ pieceId, setIndex, animationProgress }: SpherePieceProps)
     );
 }
 
-function Scene({ animationProgress }: { animationProgress: number }) {
+function Scene({ animationProgress }: { animationProgress: React.MutableRefObject<number> }) {
     const sceneRef = useRef<THREE.Group>(null!);
 
     useFrame(() => {
@@ -311,17 +313,14 @@ function InfoPanel({
 
 function AnimationController({
     isSplit,
-    onProgressUpdate,
+    progressRef,
 }: {
     isSplit: boolean;
-    onProgressUpdate: (progress: number) => void;
+    progressRef: React.MutableRefObject<number>;
 }) {
-    const progressRef = useRef(0);
-
     useFrame(() => {
         const target = isSplit ? 1 : 0;
         progressRef.current += (target - progressRef.current) * 0.06;
-        onProgressUpdate(progressRef.current);
     });
 
     return null;
@@ -329,7 +328,7 @@ function AnimationController({
 
 export default function BanachTarski() {
     const [isSplit, setIsSplit] = useState(false);
-    const [animationProgress, setAnimationProgress] = useState(0);
+    const animationProgressRef = useRef(0);
 
     return (
         <div style={{ width: '100%', height: '100%', position: 'relative', background: '#0f172a' }}>
@@ -338,8 +337,8 @@ export default function BanachTarski() {
                 <directionalLight position={[5, 10, 7.5]} intensity={0.8} />
                 <pointLight position={[-5, -5, 5]} color="#3b82f6" intensity={0.5} />
 
-                <Scene animationProgress={animationProgress} />
-                <AnimationController isSplit={isSplit} onProgressUpdate={setAnimationProgress} />
+                <Scene animationProgress={animationProgressRef} />
+                <AnimationController isSplit={isSplit} progressRef={animationProgressRef} />
 
                 <OrbitControls enableDamping dampingFactor={0.05} />
                 <fog attach="fog" args={['#0a0a0f', 8, 25]} />
@@ -353,4 +352,3 @@ export default function BanachTarski() {
         </div>
     );
 }
-
