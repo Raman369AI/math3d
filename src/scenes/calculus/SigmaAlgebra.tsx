@@ -2,37 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ShieldCheck, Zap, BookOpen, Scale } from 'lucide-react';
+import Latex from '../../components/Latex';
 
-
-interface LatexProps {
-    formula: string;
-    display?: boolean;
-}
-
-function Latex({ formula, display = false }: LatexProps) {
-    const containerRef = useRef<HTMLSpanElement>(null);
-
-    useEffect(() => {
-        if (containerRef.current && window.katex) {
-            window.katex.render(formula, containerRef.current, {
-                throwOnError: false,
-                displayMode: display,
-            });
-        }
-    }, [formula, display]);
-
-    return (
-        <span
-            ref={containerRef}
-            style={{
-                display: display ? 'block' : 'inline-block',
-                margin: display ? '16px 0' : '0',
-                textAlign: display ? 'center' : 'left',
-                overflowX: 'auto',
-            }}
-        />
-    );
-}
 
 type SigmaMode = 'atoms' | 'complement' | 'union' | 'universe';
 
@@ -41,9 +12,94 @@ interface SigmaSceneProps {
     mode: SigmaMode;
 }
 
+const ATOM_COLORS = [0x3b82f6, 0xef4444, 0x10b981, 0xf59e0b, 0x8b5cf6, 0xec4899];
+
+function SigmaAtoms({ level }: { level: number }) {
+    const count = Math.pow(2, level);
+    return (
+        <>
+            {Array.from({ length: count }).map((_, i) => {
+                const phiStart = (i / count) * Math.PI * 2;
+                const phiLength = (1 / count) * Math.PI * 2;
+                return (
+                    <mesh key={i}>
+                        <sphereGeometry args={[2.05, 32, 32, phiStart, phiLength, 0, Math.PI]} />
+                        <meshPhongMaterial
+                            color={ATOM_COLORS[i % ATOM_COLORS.length]}
+                            side={THREE.DoubleSide}
+                            transparent
+                            opacity={0.6}
+                        />
+                    </mesh>
+                );
+            })}
+        </>
+    );
+}
+
+function SigmaComplement() {
+    return (
+        <>
+            <mesh>
+                <sphereGeometry args={[2.1, 32, 32, 0, Math.PI, 0, Math.PI]} />
+                <meshPhongMaterial
+                    color={0x3b82f6}
+                    side={THREE.DoubleSide}
+                    transparent
+                    opacity={0.7}
+                />
+            </mesh>
+            <mesh>
+                <sphereGeometry args={[2.1, 32, 32, Math.PI, Math.PI, 0, Math.PI]} />
+                <meshPhongMaterial
+                    color={0xef4444}
+                    side={THREE.DoubleSide}
+                    transparent
+                    opacity={0.4}
+                />
+            </mesh>
+        </>
+    );
+}
+
+function SigmaUnion() {
+    return (
+        <>
+            {Array.from({ length: 3 }).map((_, i) => {
+                const phiStart = (i / 6) * Math.PI * 2;
+                const phiLength = (1 / 8) * Math.PI * 2;
+                return (
+                    <mesh key={i}>
+                        <sphereGeometry args={[2.1, 32, 32, phiStart, phiLength, 0, Math.PI]} />
+                        <meshPhongMaterial
+                            color={0x10b981}
+                            side={THREE.DoubleSide}
+                            transparent
+                            opacity={0.8}
+                        />
+                    </mesh>
+                );
+            })}
+        </>
+    );
+}
+
+function SigmaUniverse() {
+    return (
+        <mesh>
+            <sphereGeometry args={[2.1, 32, 32]} />
+            <meshPhongMaterial
+                color={0x8b5cf6}
+                side={THREE.DoubleSide}
+                transparent
+                opacity={0.5}
+            />
+        </mesh>
+    );
+}
+
 function SigmaScene({ level, mode }: SigmaSceneProps) {
     const setsRef = useRef<THREE.Group>(null!);
-    const colors = [0x3b82f6, 0xef4444, 0x10b981, 0xf59e0b, 0x8b5cf6, 0xec4899];
 
     useFrame(() => {
         if (setsRef.current) {
@@ -67,75 +123,10 @@ function SigmaScene({ level, mode }: SigmaSceneProps) {
 
             {/* Dynamic sets */}
             <group ref={setsRef}>
-                {mode === 'atoms' && (() => {
-                    const count = Math.pow(2, level);
-                    return Array.from({ length: count }).map((_, i) => {
-                        const phiStart = (i / count) * Math.PI * 2;
-                        const phiLength = (1 / count) * Math.PI * 2;
-                        return (
-                            <mesh key={i}>
-                                <sphereGeometry args={[2.05, 32, 32, phiStart, phiLength, 0, Math.PI]} />
-                                <meshPhongMaterial
-                                    color={colors[i % colors.length]}
-                                    side={THREE.DoubleSide}
-                                    transparent
-                                    opacity={0.6}
-                                />
-                            </mesh>
-                        );
-                    });
-                })()}
-
-                {mode === 'complement' && (
-                    <>
-                        <mesh>
-                            <sphereGeometry args={[2.1, 32, 32, 0, Math.PI, 0, Math.PI]} />
-                            <meshPhongMaterial
-                                color={0x3b82f6}
-                                side={THREE.DoubleSide}
-                                transparent
-                                opacity={0.7}
-                            />
-                        </mesh>
-                        <mesh>
-                            <sphereGeometry args={[2.1, 32, 32, Math.PI, Math.PI, 0, Math.PI]} />
-                            <meshPhongMaterial
-                                color={0xef4444}
-                                side={THREE.DoubleSide}
-                                transparent
-                                opacity={0.4}
-                            />
-                        </mesh>
-                    </>
-                )}
-
-                {mode === 'union' && Array.from({ length: 3 }).map((_, i) => {
-                    const phiStart = (i / 6) * Math.PI * 2;
-                    const phiLength = (1 / 8) * Math.PI * 2;
-                    return (
-                        <mesh key={i}>
-                            <sphereGeometry args={[2.1, 32, 32, phiStart, phiLength, 0, Math.PI]} />
-                            <meshPhongMaterial
-                                color={0x10b981}
-                                side={THREE.DoubleSide}
-                                transparent
-                                opacity={0.8}
-                            />
-                        </mesh>
-                    );
-                })}
-
-                {mode === 'universe' && (
-                    <mesh>
-                        <sphereGeometry args={[2.1, 32, 32]} />
-                        <meshPhongMaterial
-                            color={0x8b5cf6}
-                            side={THREE.DoubleSide}
-                            transparent
-                            opacity={0.5}
-                        />
-                    </mesh>
-                )}
+                {mode === 'atoms' && <SigmaAtoms level={level} />}
+                {mode === 'complement' && <SigmaComplement />}
+                {mode === 'union' && <SigmaUnion />}
+                {mode === 'universe' && <SigmaUniverse />}
             </group>
 
             <pointLight position={[10, 10, 10]} intensity={1} />
