@@ -11,7 +11,7 @@ interface RiemannSceneProps {
 }
 
 function RiemannScene({ nPartitions }: RiemannSceneProps) {
-    const boxesRef = useRef<THREE.Group>(null!);
+    const meshRef = useRef<THREE.InstancedMesh>(null!);
 
     const curvePoints = useMemo(() => {
         const points: THREE.Vector3[] = [];
@@ -38,9 +38,22 @@ function RiemannScene({ nPartitions }: RiemannSceneProps) {
         return boxData;
     }, [nPartitions]);
 
+    useLayoutEffect(() => {
+        if (!meshRef.current) return;
+        const tempObject = new THREE.Object3D();
+        for (let i = 0; i < boxes.length; i++) {
+            const box = boxes[i];
+            tempObject.position.set(...box.position);
+            tempObject.scale.set(...box.scale);
+            tempObject.updateMatrix();
+            meshRef.current.setMatrixAt(i, tempObject.matrix);
+        }
+        meshRef.current.instanceMatrix.needsUpdate = true;
+    }, [boxes]);
+
     useFrame(() => {
-        if (boxesRef.current) {
-            boxesRef.current.rotation.y += 0.005;
+        if (meshRef.current) {
+            meshRef.current.rotation.y += 0.005;
         }
     });
 
@@ -60,14 +73,10 @@ function RiemannScene({ nPartitions }: RiemannSceneProps) {
             </line>
 
             {/* Riemann boxes */}
-            <group ref={boxesRef}>
-                {boxes.map((box, i) => (
-                    <mesh key={i} position={box.position} scale={box.scale}>
-                        <boxGeometry args={[1, 1, 1]} />
-                        <meshPhongMaterial color={0x60a5fa} transparent opacity={0.7} />
-                    </mesh>
-                ))}
-            </group>
+            <instancedMesh ref={meshRef} args={[undefined, undefined, boxes.length]}>
+                <boxGeometry args={[1, 1, 1]} />
+                <meshPhongMaterial color={0x60a5fa} transparent opacity={0.7} />
+            </instancedMesh>
 
             <directionalLight position={[5, 5, 5]} intensity={1} />
             <ambientLight intensity={0.4} />
@@ -158,14 +167,10 @@ export default function RiemannIntegral() {
                             overflowX: 'auto',
                         }}
                     >
-                        {katexLoaded ? (
-                            <Latex
-                                display
-                                formula="\int_a^b f(x) \, dx = \lim_{n \to \infty} \sum_{i=1}^n f(x_i^*) \Delta x"
-                            />
-                        ) : (
-                            <span style={{ color: '#94a3b8' }}>Loading equation...</span>
-                        )}
+                        <Latex
+                            display
+                            formula="\int_a^b f(x) \, dx = \lim_{n \to \infty} \sum_{i=1}^n f(x_i^*) \Delta x"
+                        />
                     </div>
                 </div>
 
@@ -189,7 +194,7 @@ export default function RiemannIntegral() {
                         }}
                     >
                         <span>
-                            Number of Partitions ({katexLoaded ? <Latex formula="n" /> : 'n'}):
+                            Number of Partitions (<Latex formula="n" />):
                         </span>
                         <span style={{ color: '#00cec9', fontWeight: 700 }}>{riemannN}</span>
                     </label>

@@ -284,11 +284,7 @@ export default function MeasureTheoryML() {
                         display: 'flex',
                         justifyContent: 'center'
                     }}>
-                        {katexLoaded ? (
-                            <Latex formula={current.math} display />
-                        ) : (
-                            <span style={{ color: '#94a3b8' }}>Loading equation...</span>
-                        )}
+                        <Latex formula={current.math} display />
                     </div>
                 </div>
 
