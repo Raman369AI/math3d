@@ -368,7 +368,7 @@ export default function RiemannVsLebesgue() {
                     <span style={{ display: 'block', fontWeight: 700, color: '#60a5fa', marginBottom: '4px' }}>
                         {description.title}
                     </span>
-                    <span dangerouslySetInnerHTML={{ __html: description.text }} />
+                    <span>{description.text}</span>
                 </div>
             </div>
 
