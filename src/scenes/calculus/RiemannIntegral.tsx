@@ -1,46 +1,9 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { Activity, Info } from 'lucide-react';
-
-declare global {
-    interface Window {
-        katex?: {
-            render: (tex: string, element: HTMLElement, options?: Record<string, unknown>) => void;
-        };
-    }
-}
-
-interface LatexProps {
-    formula: string;
-    display?: boolean;
-}
-
-function Latex({ formula, display = false }: LatexProps) {
-    const containerRef = useRef<HTMLSpanElement>(null);
-
-    useEffect(() => {
-        if (containerRef.current && window.katex) {
-            window.katex.render(formula, containerRef.current, {
-                throwOnError: false,
-                displayMode: display,
-            });
-        }
-    }, [formula, display]);
-
-    return (
-        <span
-            ref={containerRef}
-            style={{
-                display: display ? 'block' : 'inline-block',
-                margin: display ? '16px 0' : '0',
-                textAlign: display ? 'center' : 'left',
-                overflowX: 'auto',
-            }}
-        />
-    );
-}
+import Latex from '../../components/Latex';
 
 interface RiemannSceneProps {
     nPartitions: number;
@@ -114,24 +77,6 @@ function RiemannScene({ nPartitions }: RiemannSceneProps) {
 
 export default function RiemannIntegral() {
     const [riemannN, setRiemannN] = useState(12);
-    const [katexLoaded, setKatexLoaded] = useState(false);
-
-    useEffect(() => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css';
-        document.head.appendChild(link);
-
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js';
-        script.onload = () => setKatexLoaded(true);
-        document.head.appendChild(script);
-
-        return () => {
-            document.head.removeChild(link);
-            document.head.removeChild(script);
-        };
-    }, []);
 
     return (
         <div style={{ width: '100%', height: '100%', position: 'relative', background: '#0f172a' }}>
@@ -211,14 +156,10 @@ export default function RiemannIntegral() {
                             overflowX: 'auto',
                         }}
                     >
-                        {katexLoaded ? (
-                            <Latex
-                                display
-                                formula="\int_a^b f(x) \, dx = \lim_{n \to \infty} \sum_{i=1}^n f(x_i^*) \Delta x"
-                            />
-                        ) : (
-                            <span style={{ color: '#94a3b8' }}>Loading equation...</span>
-                        )}
+                        <Latex
+                            display
+                            formula="\int_a^b f(x) \, dx = \lim_{n \to \infty} \sum_{i=1}^n f(x_i^*) \Delta x"
+                        />
                     </div>
                 </div>
 
@@ -242,7 +183,7 @@ export default function RiemannIntegral() {
                         }}
                     >
                         <span>
-                            Number of Partitions ({katexLoaded ? <Latex formula="n" /> : 'n'}):
+                            Number of Partitions (<Latex formula="n" />):
                         </span>
                         <span style={{ color: '#00cec9', fontWeight: 700 }}>{riemannN}</span>
                     </label>
