@@ -190,6 +190,7 @@ function ReLUScene({ isActive }: SceneProps) {
 // --- Main Component ---
 export default function MeasureTheoryML() {
     const [scene, setScene] = useState<SceneType>('manifold');
+    const katexLoaded = useKatex();
 
     const sceneData: Record<SceneType, { title: string; description: string; math: string; color: string }> = {
         manifold: {
