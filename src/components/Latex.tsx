@@ -1,23 +1,23 @@
 import { useEffect, useRef } from 'react';
-import katex from 'katex';
-import 'katex/dist/katex.min.css';
+import { useKatex } from '../hooks/useKatex';
 
-interface LatexProps {
+export interface LatexProps {
     formula: string;
     display?: boolean;
 }
 
 export default function Latex({ formula, display = false }: LatexProps) {
     const containerRef = useRef<HTMLSpanElement>(null);
+    const isKatexLoaded = useKatex();
 
     useEffect(() => {
-        if (containerRef.current) {
-            katex.render(formula, containerRef.current, {
+        if (containerRef.current && isKatexLoaded && window.katex) {
+            window.katex.render(formula, containerRef.current, {
                 throwOnError: false,
                 displayMode: display,
             });
         }
-    }, [formula, display]);
+    }, [formula, display, isKatexLoaded]);
 
     return (
         <span
