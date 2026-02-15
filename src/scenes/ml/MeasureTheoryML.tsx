@@ -1,16 +1,8 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Grid, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import { Info } from 'lucide-react';
-
-declare global {
-    interface Window {
-        katex?: {
-            render: (tex: string, element: HTMLElement, options?: Record<string, unknown>) => void;
-        };
-    }
-}
 
 interface LatexProps {
     formula: string;
@@ -41,6 +33,7 @@ function Latex({ formula, display = false }: LatexProps) {
         />
     );
 }
+import Latex from '../../components/Latex';
 
 // --- Types ---
 type SceneType = 'manifold' | 'flows' | 'relu';
@@ -197,24 +190,7 @@ function ReLUScene({ isActive }: SceneProps) {
 // --- Main Component ---
 export default function MeasureTheoryML() {
     const [scene, setScene] = useState<SceneType>('manifold');
-    const [katexLoaded, setKatexLoaded] = useState(false);
-
-    useEffect(() => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css';
-        document.head.appendChild(link);
-
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js';
-        script.onload = () => setKatexLoaded(true);
-        document.head.appendChild(script);
-
-        return () => {
-            document.head.removeChild(link);
-            document.head.removeChild(script);
-        };
-    }, []);
+    const katexLoaded = useKatex();
 
     const sceneData: Record<SceneType, { title: string; description: string; math: string; color: string }> = {
         manifold: {
@@ -337,11 +313,7 @@ export default function MeasureTheoryML() {
                         display: 'flex',
                         justifyContent: 'center'
                     }}>
-                        {katexLoaded ? (
-                            <Latex formula={current.math} display />
-                        ) : (
-                            <span style={{ color: '#94a3b8' }}>Loading equation...</span>
-                        )}
+                        <Latex formula={current.math} display />
                     </div>
                 </div>
 

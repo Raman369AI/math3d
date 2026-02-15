@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useLayoutEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
@@ -30,19 +30,46 @@ const POINTS = (() => {
     return pts;
 })();
 
+const POINTS_0 = POINTS.filter((p) => p.classId === 0);
+const POINTS_1 = POINTS.filter((p) => p.classId === 1);
+
+function InstancedPoints({
+    points,
+    color,
+}: {
+    points: typeof POINTS;
+    color: string;
+}) {
+    const meshRef = useRef<THREE.InstancedMesh>(null);
+    const temp = useMemo(() => new THREE.Object3D(), []);
+
+    useLayoutEffect(() => {
+        if (!meshRef.current) return;
+        points.forEach((pt, i) => {
+            temp.position.set(...pt.pos);
+            temp.updateMatrix();
+            meshRef.current!.setMatrixAt(i, temp.matrix);
+        });
+        meshRef.current.instanceMatrix.needsUpdate = true;
+    }, [points, temp]);
+
+    return (
+        <instancedMesh ref={meshRef} args={[undefined, undefined, points.length]}>
+            <sphereGeometry args={[0.08, 12, 12]} />
+            <meshStandardMaterial
+                color={color}
+                emissive={color}
+                emissiveIntensity={0.5}
+            />
+        </instancedMesh>
+    );
+}
+
 function DataPoints() {
     return (
         <>
-            {POINTS.map((pt, i) => (
-                <mesh key={i} position={pt.pos}>
-                    <sphereGeometry args={[0.08, 12, 12]} />
-                    <meshStandardMaterial
-                        color={pt.classId === 0 ? '#fdcb6e' : '#6c5ce7'}
-                        emissive={pt.classId === 0 ? '#fdcb6e' : '#6c5ce7'}
-                        emissiveIntensity={0.5}
-                    />
-                </mesh>
-            ))}
+            <InstancedPoints points={POINTS_0} color="#fdcb6e" />
+            <InstancedPoints points={POINTS_1} color="#6c5ce7" />
         </>
     );
 }
