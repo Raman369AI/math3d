@@ -3,7 +3,37 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { Activity, Info } from 'lucide-react';
-import Latex from '../../components/Latex';
+
+
+interface LatexProps {
+    formula: string;
+    display?: boolean;
+}
+
+function Latex({ formula, display = false }: LatexProps) {
+    const containerRef = useRef<HTMLSpanElement>(null);
+
+    useEffect(() => {
+        if (containerRef.current && window.katex) {
+            window.katex.render(formula, containerRef.current, {
+                throwOnError: false,
+                displayMode: display,
+            });
+        }
+    }, [formula, display]);
+
+    return (
+        <span
+            ref={containerRef}
+            style={{
+                display: display ? 'block' : 'inline-block',
+                margin: display ? '16px 0' : '0',
+                textAlign: display ? 'center' : 'left',
+                overflowX: 'auto',
+            }}
+        />
+    );
+}
 
 interface RiemannSceneProps {
     nPartitions: number;
