@@ -1,66 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ShieldCheck, Zap, BookOpen, Scale } from 'lucide-react';
 import Latex from '../../components/Latex';
-
-
-type SigmaMode = 'atoms' | 'complement' | 'union' | 'universe';
-
-interface SigmaSceneProps {
-    level: number;
-    mode: SigmaMode;
-}
-
-const ATOM_COLORS = [0x3b82f6, 0xef4444, 0x10b981, 0xf59e0b, 0x8b5cf6, 0xec4899];
-
-function SigmaAtoms({ level }: { level: number }) {
-    const count = Math.pow(2, level);
-    return (
-        <>
-            {Array.from({ length: count }).map((_, i) => {
-                const phiStart = (i / count) * Math.PI * 2;
-                const phiLength = (1 / count) * Math.PI * 2;
-                return (
-                    <mesh key={i}>
-                        <sphereGeometry args={[2.05, 32, 32, phiStart, phiLength, 0, Math.PI]} />
-                        <meshPhongMaterial
-                            color={ATOM_COLORS[i % ATOM_COLORS.length]}
-                            side={THREE.DoubleSide}
-                            transparent
-                            opacity={0.6}
-                        />
-                    </mesh>
-                );
-            })}
-        </>
-    );
-}
-
-function SigmaComplement() {
-    return (
-        <>
-            <mesh>
-                <sphereGeometry args={[2.1, 32, 32, 0, Math.PI, 0, Math.PI]} />
-                <meshPhongMaterial
-                    color={0x3b82f6}
-                    side={THREE.DoubleSide}
-                    transparent
-                    opacity={0.7}
-                />
-            </mesh>
-            <mesh>
-                <sphereGeometry args={[2.1, 32, 32, Math.PI, Math.PI, 0, Math.PI]} />
-                <meshPhongMaterial
-                    color={0xef4444}
-                    side={THREE.DoubleSide}
-                    transparent
-                    opacity={0.4}
-                />
-            </mesh>
-        </>
-    );
-}
 
 function SigmaUnion() {
     return (
