@@ -41,8 +41,14 @@ function LossLandscape() {
 
 function DescentPath() {
     const ballRef = useRef<THREE.Mesh>(null!);
+    const lineRef = useRef<any>(null!);
     const trailRef = useRef<[number, number, number][]>([]);
-    const [trail, setTrail] = useState<[number, number, number][]>([]);
+
+    const flatPoints = useMemo(() => new Float32Array(61 * 3), []);
+    const initialPoints = useMemo(
+        () => new Array(61).fill([0, 0, 0]) as [number, number, number][],
+        []
+    );
 
     useFrame((state) => {
         const t = state.clock.elapsedTime * 0.4;
@@ -61,7 +67,21 @@ function DescentPath() {
 
         if (Math.floor(t * 10) % 2 === 0) {
             trailRef.current = [...trailRef.current.slice(-60), [x, y, z]];
-            setTrail([...trailRef.current]);
+
+            if (lineRef.current) {
+                const points = trailRef.current;
+                const len = points.length;
+                const fillCount = 61 - len;
+                const firstPoint = points[0] || [x, y, z];
+
+                for (let i = 0; i < 61; i++) {
+                    const p = i < fillCount ? firstPoint : points[i - fillCount];
+                    flatPoints[i * 3] = p[0];
+                    flatPoints[i * 3 + 1] = p[1];
+                    flatPoints[i * 3 + 2] = p[2];
+                }
+                lineRef.current.geometry.setPositions(flatPoints);
+            }
         }
     });
 
@@ -70,9 +90,14 @@ function DescentPath() {
             <Sphere ref={ballRef} args={[0.12, 16, 16]}>
                 <meshStandardMaterial color="#fd79a8" emissive="#fd79a8" emissiveIntensity={1} />
             </Sphere>
-            {trail.length > 1 && (
-                <Line points={trail} color="#fd79a8" lineWidth={2} transparent opacity={0.5} />
-            )}
+            <Line
+                ref={lineRef}
+                points={initialPoints}
+                color="#fd79a8"
+                lineWidth={2}
+                transparent
+                opacity={0.5}
+            />
         </>
     );
 }

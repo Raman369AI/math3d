@@ -1,44 +1,51 @@
 import { useState, useEffect } from 'react';
 
-const KATEX_CSS = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css';
-const KATEX_JS = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js';
-const KATEX_CSS_SRI = 'sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn';
-const KATEX_JS_SRI = 'sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx';
+declare global {
+    interface Window {
+        katex?: {
+            render: (tex: string, element: HTMLElement, options?: Record<string, unknown>) => void;
+        };
+    }
+}
 
-export function useKatex() {
-    const [katexLoaded, setKatexLoaded] = useState(!!window.katex);
+export const useKatex = () => {
+    const [isLoaded, setIsLoaded] = useState(() => typeof window !== 'undefined' && !!window.katex);
 
     useEffect(() => {
-        if (katexLoaded) return;
+        if (isLoaded) return;
 
         if (window.katex) {
-            // Use setTimeout to avoid synchronous state update warning
-            setTimeout(() => setKatexLoaded(true), 0);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsLoaded(true);
             return;
         }
 
-        const existingScript = document.querySelector(`script[src="${KATEX_JS}"]`);
-
-        if (existingScript) {
-             existingScript.addEventListener('load', () => setKatexLoaded(true));
-             return;
+        const linkId = 'katex-css';
+        if (!document.getElementById(linkId)) {
+            const link = document.createElement('link');
+            link.id = linkId;
+            link.rel = 'stylesheet';
+            link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css';
+            document.head.appendChild(link);
         }
 
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = KATEX_CSS;
-        link.integrity = KATEX_CSS_SRI;
-        link.crossOrigin = 'anonymous';
-        document.head.appendChild(link);
+        const scriptId = 'katex-js';
+        let script = document.getElementById(scriptId) as HTMLScriptElement;
 
-        const script = document.createElement('script');
-        script.src = KATEX_JS;
-        script.integrity = KATEX_JS_SRI;
-        script.crossOrigin = 'anonymous';
-        script.onload = () => setKatexLoaded(true);
-        document.head.appendChild(script);
+        if (!script) {
+            script = document.createElement('script');
+            script.id = scriptId;
+            script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js';
+            document.head.appendChild(script);
+        }
 
-    }, [katexLoaded]);
+        const onLoad = () => setIsLoaded(true);
+        script.addEventListener('load', onLoad);
 
-    return katexLoaded;
-}
+        return () => {
+            script.removeEventListener('load', onLoad);
+        };
+    }, [isLoaded]);
+
+    return isLoaded;
+};

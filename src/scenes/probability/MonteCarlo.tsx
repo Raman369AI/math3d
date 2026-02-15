@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
+import { secureRandom } from '../../utils/secureRandom';
 
 function MonteCarloPoints() {
     const [points, setPoints] = useState<{ pos: [number, number, number]; inside: boolean }[]>([]);
@@ -10,9 +11,9 @@ function MonteCarloPoints() {
     useFrame(() => {
         frameCount.current++;
         if (frameCount.current % 5 === 0 && points.length < 500) {
-            const x = (Math.random() - 0.5) * 4;
-            const y = (Math.random() - 0.5) * 4;
-            const z = (Math.random() - 0.5) * 4;
+            const x = (secureRandom() - 0.5) * 4;
+            const y = (secureRandom() - 0.5) * 4;
+            const z = (secureRandom() - 0.5) * 4;
             const inside = Math.sqrt(x * x + y * y + z * z) <= 2;
             setPoints((prev) => [...prev, { pos: [x, y, z], inside }]);
         }
