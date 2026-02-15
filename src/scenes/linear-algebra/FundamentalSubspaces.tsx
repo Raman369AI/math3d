@@ -1,7 +1,10 @@
 import { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
+import { Arrow } from '../../components/3d/Arrow';
+import { Label } from '../../components/3d/Label';
+import { SubspacePlane, SubspaceLine } from '../../components/3d/Subspace';
 
 /* ========== Data ========== */
 const DATA = {
@@ -17,135 +20,6 @@ const DATA = {
 
 type ViewMode = 'domain' | 'codomain';
 
-/* ========== 3D Helpers ========== */
-function Arrow3D({
-    direction,
-    color,
-    origin = [0, 0, 0],
-    thickness = 0.08,
-}: {
-    direction: [number, number, number];
-    color: string;
-    origin?: [number, number, number];
-    thickness?: number;
-}) {
-    const vDir = new THREE.Vector3(...direction);
-    const length = vDir.length();
-    if (length < 1e-4) return null;
-    vDir.normalize();
-
-    const headLength = Math.min(0.6, length * 0.2);
-    const shaftLength = length - headLength;
-    const quaternion = new THREE.Quaternion().setFromUnitVectors(
-        new THREE.Vector3(0, 1, 0),
-        vDir
-    );
-
-    return (
-        <group position={origin} quaternion={quaternion}>
-            {shaftLength > 0.01 && (
-                <mesh position={[0, shaftLength / 2, 0]}>
-                    <cylinderGeometry args={[thickness, thickness, shaftLength, 12]} />
-                    <meshLambertMaterial color={color} />
-                </mesh>
-            )}
-            <mesh position={[0, shaftLength + headLength / 2, 0]}>
-                <coneGeometry args={[thickness * 3, headLength, 16]} />
-                <meshLambertMaterial color={color} />
-            </mesh>
-        </group>
-    );
-}
-
-function SubspacePlane({
-    normal,
-    color,
-    size = 18,
-}: {
-    normal: [number, number, number];
-    color: string;
-    size?: number;
-}) {
-    const n = new THREE.Vector3(...normal).normalize();
-    const quaternion = new THREE.Quaternion().setFromUnitVectors(
-        new THREE.Vector3(0, 0, 1),
-        n
-    );
-
-    return (
-        <group>
-            <mesh quaternion={quaternion}>
-                <planeGeometry args={[size, size]} />
-                <meshBasicMaterial
-                    color={color}
-                    side={THREE.DoubleSide}
-                    transparent
-                    opacity={0.15}
-                    depthWrite={false}
-                />
-            </mesh>
-            <gridHelper
-                args={[size, size, color, color]}
-                quaternion={new THREE.Quaternion().setFromUnitVectors(
-                    new THREE.Vector3(0, 1, 0),
-                    n
-                )}
-                material-opacity={0.2}
-                material-transparent={true}
-                material-depthWrite={false}
-            />
-        </group>
-    );
-}
-
-function SubspaceLine({
-    direction,
-    color,
-    length = 30,
-}: {
-    direction: [number, number, number];
-    color: string;
-    length?: number;
-}) {
-    const vDir = new THREE.Vector3(...direction).normalize();
-    const quaternion = new THREE.Quaternion().setFromUnitVectors(
-        new THREE.Vector3(0, 1, 0),
-        vDir
-    );
-
-    return (
-        <mesh quaternion={quaternion}>
-            <cylinderGeometry args={[0.06, 0.06, length, 8]} />
-            <meshBasicMaterial color={color} transparent opacity={0.7} />
-        </mesh>
-    );
-}
-
-function VectorLabel({
-    text,
-    position,
-    color,
-}: {
-    text: string;
-    position: [number, number, number];
-    color: string;
-}) {
-    return (
-        <Text
-            position={position}
-            fontSize={0.6}
-            color={color}
-            anchorX="center"
-            anchorY="middle"
-            outlineWidth={0.04}
-            outlineColor="#0f172a"
-            font={undefined}
-        >
-            {text}
-        </Text>
-    );
-}
-
 /* ========== Domain Scene ========== */
 function DomainView() {
     const groupRef = useRef<THREE.Group>(null!);
@@ -158,29 +32,29 @@ function DomainView() {
         <group ref={groupRef}>
             {/* Row Space plane (green) */}
             <SubspacePlane normal={DATA.rowNormal} color="#10b981" />
-            <VectorLabel text="Row Space C(Aᵀ)" position={[4, 6, 0]} color="#34d399" />
+            <Label text="Row Space C(Aᵀ)" position={[4, 6, 0]} color="#34d399" />
 
             {/* Null Space line (red) */}
             <SubspaceLine direction={DATA.rowNormal} color="#ef4444" />
-            <VectorLabel text="Null Space N(A)" position={[4, -3, 3]} color="#f87171" />
+            <Label text="Null Space N(A)" position={[4, -3, 3]} color="#f87171" />
 
             {/* Input vector x (yellow, thick) */}
-            <Arrow3D direction={DATA.x} color="#eab308" thickness={0.12} />
-            <VectorLabel text="x = [3,3,3]" position={[3.5, 3.5, 3]} color="#facc15" />
+            <Arrow direction={DATA.x} color="#eab308" thickness={0.12} />
+            <Label text="x = [3,3,3]" position={[3.5, 3.5, 3]} color="#facc15" />
 
             {/* x_row (light green) */}
-            <Arrow3D direction={DATA.x_row} color="#86efac" thickness={0.06} />
-            <VectorLabel text="x_r = [1,4,2]" position={[1, 5, 2]} color="#86efac" />
+            <Arrow direction={DATA.x_row} color="#86efac" thickness={0.06} />
+            <Label text="x_r = [1,4,2]" position={[1, 5, 2]} color="#86efac" />
 
             {/* x_null (light red) */}
-            <Arrow3D direction={DATA.x_null} color="#fca5a5" thickness={0.06} />
-            <VectorLabel text="x_n = [2,-1,1]" position={[3, -1.5, 1]} color="#fca5a5" />
+            <Arrow direction={DATA.x_null} color="#fca5a5" thickness={0.06} />
+            <Label text="x_n = [2,-1,1]" position={[3, -1.5, 1]} color="#fca5a5" />
 
             {/* Dashed addition: x_null from tip of x_row to show x = x_r + x_n */}
-            <Arrow3D direction={DATA.x_null} color="#64748b" origin={DATA.x_row} thickness={0.03} />
+            <Arrow direction={DATA.x_null} color="#64748b" origin={DATA.x_row} thickness={0.03} />
 
             {/* Orthogonality indicator */}
-            <VectorLabel text="⊥" position={[1.5, 0.5, 1.5]} color="#94a3b8" />
+            <Label text="⊥" position={[1.5, 0.5, 1.5]} color="#94a3b8" />
         </group>
     );
 }
@@ -197,25 +71,25 @@ function CodomainView() {
         <group ref={groupRef}>
             {/* Column Space plane (blue) */}
             <SubspacePlane normal={DATA.colNormal} color="#3b82f6" />
-            <VectorLabel text="Column Space C(A)" position={[6, -4, 4]} color="#60a5fa" />
+            <Label text="Column Space C(A)" position={[6, -4, 4]} color="#60a5fa" />
 
             {/* Left Null Space line (orange) */}
             <SubspaceLine direction={DATA.colNormal} color="#f97316" />
-            <VectorLabel text="Left Null Space N(Aᵀ)" position={[-4, -5, 5]} color="#fb923c" />
+            <Label text="Left Null Space N(Aᵀ)" position={[-4, -5, 5]} color="#fb923c" />
 
             {/* Column vectors c1, c2 (cyan) */}
-            <Arrow3D direction={DATA.c1} color="#22d3ee" thickness={0.06} />
-            <VectorLabel text="c₁ = [1,0,1]" position={[1, 1, 1]} color="#67e8f9" />
+            <Arrow direction={DATA.c1} color="#22d3ee" thickness={0.06} />
+            <Label text="c₁ = [1,0,1]" position={[1, 1, 1]} color="#67e8f9" />
 
-            <Arrow3D direction={DATA.c2} color="#22d3ee" thickness={0.06} />
-            <VectorLabel text="c₂ = [2,1,3]" position={[2, 2, 3]} color="#67e8f9" />
+            <Arrow direction={DATA.c2} color="#22d3ee" thickness={0.06} />
+            <Label text="c₂ = [2,1,3]" position={[2, 2, 3]} color="#67e8f9" />
 
             {/* Output vector b (fuchsia, thick) */}
-            <Arrow3D direction={DATA.b} color="#d946ef" thickness={0.15} />
-            <VectorLabel text="b = Ax = [9,6,15]" position={[10, 7, 16]} color="#e879f9" />
+            <Arrow direction={DATA.b} color="#d946ef" thickness={0.15} />
+            <Label text="b = Ax = [9,6,15]" position={[10, 7, 16]} color="#e879f9" />
 
             {/* Show b as combination of columns */}
-            <VectorLabel text="b = 3c₁ + 3c₂" position={[5, -1, 8]} color="#a78bfa" />
+            <Label text="b = 3c₁ + 3c₂" position={[5, -1, 8]} color="#a78bfa" />
         </group>
     );
 }
@@ -525,6 +399,7 @@ export default function FundamentalSubspaces() {
                 style={{ width: '100%', height: '100%' }}
                 dpr={[1, 1.5]}
                 gl={{ powerPreference: 'default', antialias: true }}
+                aria-label="Fundamental Subspaces Visualization"
                 onCreated={({ gl }) => {
                     const canvas = gl.domElement;
                     canvas.addEventListener('webglcontextlost', (e) => {

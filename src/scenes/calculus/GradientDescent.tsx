@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState } from 'react';
+import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
@@ -38,8 +38,6 @@ function LossSurface() {
 
 function DescentBall() {
     const ref = useRef<THREE.Mesh>(null!);
-    const [trail, setTrail] = useState<[number, number, number][]>([]);
-    const posRef = useRef({ x: 3, y: 3 });
 
     useFrame((state) => {
         const t = state.clock.elapsedTime;
@@ -53,11 +51,6 @@ function DescentBall() {
         const y = (x * x + z * z) * 0.12 + Math.sin(x) * Math.cos(z) * 0.3 + 0.1;
 
         ref.current.position.set(x, y, z);
-        posRef.current = { x, y: z };
-
-        if (Math.floor(t * 10) % 3 === 0) {
-            setTrail((prev) => [...prev.slice(-40), [x, y, z]]);
-        }
     });
 
     return (

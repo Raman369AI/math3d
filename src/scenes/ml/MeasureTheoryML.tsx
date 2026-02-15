@@ -50,19 +50,19 @@ interface SceneProps {
 }
 
 // --- 1. Manifold Hypothesis Scene ---
+const MANIFOLD_POINTS = (() => {
+    const points: THREE.Vector3[] = [];
+    for (let i = 0; i < 1000; i++) {
+        const x = (Math.random() - 0.5) * 10;
+        const y = (Math.random() - 0.5) * 10;
+        const z = Math.sin(x * 0.5) * 0.5 + Math.cos(y * 0.5) * 0.5 + (Math.random() - 0.5) * 0.2;
+        points.push(new THREE.Vector3(x, y, z));
+    }
+    return points;
+})();
+
 function ManifoldScene({ isActive }: SceneProps) {
     const planeRef = useRef<THREE.Mesh>(null);
-
-    const dataPoints = useMemo(() => {
-        const points: THREE.Vector3[] = [];
-        for (let i = 0; i < 1000; i++) {
-            const x = (Math.random() - 0.5) * 10;
-            const y = (Math.random() - 0.5) * 10;
-            const z = Math.sin(x * 0.5) * 0.5 + Math.cos(y * 0.5) * 0.5 + (Math.random() - 0.5) * 0.2;
-            points.push(new THREE.Vector3(x, y, z));
-        }
-        return points;
-    }, []);
 
     useFrame((state) => {
         if (!isActive || !planeRef.current) return;
@@ -90,7 +90,7 @@ function ManifoldScene({ isActive }: SceneProps) {
                 <bufferGeometry>
                     <bufferAttribute
                         attach="attributes-position"
-                        args={[new Float32Array(dataPoints.flatMap(p => [p.x, p.y, p.z])), 3]}
+                        args={[new Float32Array(MANIFOLD_POINTS.flatMap(p => [p.x, p.y, p.z])), 3]}
                     />
                 </bufferGeometry>
                 <pointsMaterial size={0.08} color="#60a5fa" transparent opacity={0.8} />
@@ -100,24 +100,24 @@ function ManifoldScene({ isActive }: SceneProps) {
 }
 
 // --- 2. Normalizing Flows Scene ---
+const FLOW_COUNT = 1000;
+const FLOW_INITIAL_POSITIONS = (() => {
+    const pos: THREE.Vector3[] = [];
+    for (let i = 0; i < FLOW_COUNT; i++) {
+        const r = 2 * Math.cbrt(Math.random());
+        const theta = Math.random() * 2 * Math.PI;
+        const phi = Math.acos(2 * Math.random() - 1);
+        pos.push(new THREE.Vector3(
+            r * Math.sin(phi) * Math.cos(theta),
+            r * Math.sin(phi) * Math.sin(theta),
+            r * Math.cos(phi)
+        ));
+    }
+    return pos;
+})();
+
 function FlowsScene({ isActive }: SceneProps) {
     const meshRef = useRef<THREE.InstancedMesh>(null);
-
-    const count = 1000;
-    const initialPositions = useMemo(() => {
-        const pos: THREE.Vector3[] = [];
-        for (let i = 0; i < count; i++) {
-            const r = 2 * Math.cbrt(Math.random());
-            const theta = Math.random() * 2 * Math.PI;
-            const phi = Math.acos(2 * Math.random() - 1);
-            pos.push(new THREE.Vector3(
-                r * Math.sin(phi) * Math.cos(theta),
-                r * Math.sin(phi) * Math.sin(theta),
-                r * Math.cos(phi)
-            ));
-        }
-        return pos;
-    }, []);
 
     const dummy = useMemo(() => new THREE.Vector3(), []);
     const color = useMemo(() => new THREE.Color(), []);
@@ -128,8 +128,8 @@ function FlowsScene({ isActive }: SceneProps) {
 
         const time = state.clock.getElapsedTime();
 
-        for (let i = 0; i < count; i++) {
-            const base = initialPositions[i];
+        for (let i = 0; i < FLOW_COUNT; i++) {
+            const base = FLOW_INITIAL_POSITIONS[i];
             const warp = Math.sin(time * 0.5 + base.x) * 0.8 + 1.2;
 
             dummy.set(
@@ -156,7 +156,7 @@ function FlowsScene({ isActive }: SceneProps) {
     return (
         <group>
             <Grid infiniteGrid sectionColor="#3b82f6" cellColor="#1e293b" fadeDistance={20} />
-            <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+            <instancedMesh ref={meshRef} args={[undefined, undefined, FLOW_COUNT]}>
                 <sphereGeometry args={[0.08, 8, 8]} />
                 <meshBasicMaterial />
             </instancedMesh>

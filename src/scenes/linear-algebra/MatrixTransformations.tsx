@@ -52,7 +52,7 @@ function TransformingCube() {
 
 export default function MatrixTransformations() {
     return (
-        <Canvas camera={{ position: [4, 3, 4], fov: 50 }} style={{ width: '100%', height: '100%' }}>
+        <Canvas camera={{ position: [4, 3, 4], fov: 50 }} style={{ width: '100%', height: '100%' }} aria-label="Matrix Transformation Visualization">
             <ambientLight intensity={0.4} />
             <directionalLight position={[5, 5, 5]} intensity={0.8} />
             <pointLight position={[-3, -3, 3]} intensity={0.5} color="#6c5ce7" />

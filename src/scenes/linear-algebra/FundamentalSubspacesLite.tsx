@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Text, Line } from '@react-three/drei';
-import * as THREE from 'three';
+import { OrbitControls } from '@react-three/drei';
+import { Arrow } from '../../components/3d/Arrow';
+import { Label } from '../../components/3d/Label';
 
 /* Simplified data */
 const DATA = {
@@ -12,53 +13,21 @@ const DATA = {
 
 type ViewMode = 'domain' | 'codomain';
 
-/* Simplified Arrow */
-function Arrow3D({
-    direction,
-    color,
-    origin = [0, 0, 0],
-}: {
-    direction: [number, number, number];
-    color: string;
-    origin?: [number, number, number];
-}) {
-    const vDir = new THREE.Vector3(...direction);
-    const length = vDir.length();
-    if (length < 0.1) return null;
-
-    return (
-        <Line
-            points={[origin, [origin[0] + direction[0], origin[1] + direction[1], origin[2] + direction[2]]]}
-            color={color}
-            lineWidth={3}
-        />
-    );
-}
-
-/* Simplified text labels */
-function VectorLabel({ text, position, color }: { text: string; position: [number, number, number]; color: string }) {
-    return (
-        <Text position={position} fontSize={0.5} color={color} anchorX="center" anchorY="middle">
-            {text}
-        </Text>
-    );
-}
-
 /* Domain view - simplified */
 function DomainView() {
     return (
         <group>
             {/* Input vector x */}
-            <Arrow3D direction={DATA.x} color="#eab308" />
-            <VectorLabel text="x=[3,3,3]" position={[3.5, 3.5, 3]} color="#facc15" />
+            <Arrow direction={DATA.x} color="#eab308" lineWidth={3} />
+            <Label text="x=[3,3,3]" position={[3.5, 3.5, 3]} color="#facc15" />
 
             {/* Row space component */}
-            <Arrow3D direction={DATA.x_row} color="#86efac" />
-            <VectorLabel text="x_r=[1,4,2]" position={[1, 5, 2]} color="#86efac" />
+            <Arrow direction={DATA.x_row} color="#86efac" lineWidth={3} />
+            <Label text="x_r=[1,4,2]" position={[1, 5, 2]} color="#86efac" />
 
             {/* Null space component */}
-            <Arrow3D direction={DATA.x_null} color="#fca5a5" />
-            <VectorLabel text="x_n=[2,-1,1]" position={[3, -1.5, 1]} color="#fca5a5" />
+            <Arrow direction={DATA.x_null} color="#fca5a5" lineWidth={3} />
+            <Label text="x_n=[2,-1,1]" position={[3, -1.5, 1]} color="#fca5a5" />
         </group>
     );
 }
@@ -156,6 +125,7 @@ export default function FundamentalSpacesOptimized() {
                 camera={{ position: [8, 8, 8], fov: 50 }}
                 dpr={[1, 1.5]}
                 gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}
+                aria-label="Fundamental Subspaces Lite"
             >
                 <SceneBase />
                 <DomainView />

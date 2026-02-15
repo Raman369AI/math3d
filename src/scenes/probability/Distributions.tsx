@@ -42,23 +42,23 @@ function GaussianSurface() {
     );
 }
 
-function SamplePoints() {
-    const points = useMemo(() => {
-        const pts: [number, number, number][] = [];
-        for (let i = 0; i < 80; i++) {
-            const u1 = Math.random();
-            const u2 = Math.random();
-            const x = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2) * 1.2;
-            const z = Math.sqrt(-2 * Math.log(u1)) * Math.sin(2 * Math.PI * u2) * 1.2;
-            const y = 2 * Math.exp(-(x * x + z * z) / 2) + 0.05;
-            pts.push([x, y, z]);
-        }
-        return pts;
-    }, []);
+const SAMPLE_POINTS = (() => {
+    const pts: [number, number, number][] = [];
+    for (let i = 0; i < 80; i++) {
+        const u1 = Math.random();
+        const u2 = Math.random();
+        const x = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2) * 1.2;
+        const z = Math.sqrt(-2 * Math.log(u1)) * Math.sin(2 * Math.PI * u2) * 1.2;
+        const y = 2 * Math.exp(-(x * x + z * z) / 2) + 0.05;
+        pts.push([x, y, z]);
+    }
+    return pts;
+})();
 
+function SamplePoints() {
     return (
         <>
-            {points.map((pos, i) => (
+            {SAMPLE_POINTS.map((pos, i) => (
                 <mesh key={i} position={pos}>
                     <sphereGeometry args={[0.04, 8, 8]} />
                     <meshStandardMaterial color="#fdcb6e" emissive="#fdcb6e" emissiveIntensity={0.6} />

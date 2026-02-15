@@ -1,73 +1,76 @@
-# React + TypeScript + Vite
+# Math3D - Interactive 3D Mathematics
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Math3D is an interactive educational platform designed to visualize complex mathematical concepts using 3D graphics. Built with **React**, **TypeScript**, and **React Three Fiber**, it offers an immersive way to explore Linear Algebra, Calculus, Probability, and Machine Learning.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Interactive 3D Visualizations**: Rotate, zoom, and interact with mathematical objects.
+- **Topic-Based Organization**: Structured curriculum covering key mathematical fields.
+- **Responsive Design**: Accessible on desktop and mobile devices.
+- **Performance Optimized**: Uses WebGL for high-performance rendering.
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
 
-## Expanding the ESLint configuration
+- Node.js (v18 or higher recommended)
+- npm or pnpm
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd math3d
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser at `http://localhost:5173`.
+
+## Project Structure
+
+```
+src/
+├── components/       # UI components (Sidebar, Layout, etc.)
+│   └── 3d/           # Shared 3D components (Arrow, Axis, Label)
+├── data/             # Topic definitions and static data
+├── scenes/           # 3D visualization scenes grouped by topic
+│   ├── linear-algebra/
+│   ├── calculus/
+│   ├── probability/
+│   └── ml/
+├── App.tsx           # Main application entry point
+└── index.css         # Global styles and themes
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Technologies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Vite**: Fast build tool and dev server.
+- **React**: UI library.
+- **React Three Fiber (R3F)**: React renderer for Three.js.
+- **Three.js**: 3D graphics library.
+- **TypeScript**: Static typing for safer code.
+- **Tailwind CSS / CSS Modules**: (Inferred usage based on class names, though `index.css` suggests custom CSS).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Contributing
+
+Please refer to `AGENTS.md` for coding standards and architectural guidelines.
+
+1. Fork the project.
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
+
+## License
+
+This project is licensed under the MIT License.
