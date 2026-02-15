@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Grid, Line } from '@react-three/drei';
 import * as THREE from 'three';
@@ -190,24 +190,6 @@ function ReLUScene({ isActive }: SceneProps) {
 // --- Main Component ---
 export default function MeasureTheoryML() {
     const [scene, setScene] = useState<SceneType>('manifold');
-    const [katexLoaded, setKatexLoaded] = useState(false);
-
-    useEffect(() => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css';
-        document.head.appendChild(link);
-
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js';
-        script.onload = () => setKatexLoaded(true);
-        document.head.appendChild(script);
-
-        return () => {
-            document.head.removeChild(link);
-            document.head.removeChild(script);
-        };
-    }, []);
 
     const sceneData: Record<SceneType, { title: string; description: string; math: string; color: string }> = {
         manifold: {
@@ -330,11 +312,7 @@ export default function MeasureTheoryML() {
                         display: 'flex',
                         justifyContent: 'center'
                     }}>
-                        {katexLoaded ? (
-                            <Latex formula={current.math} display />
-                        ) : (
-                            <span style={{ color: '#94a3b8' }}>Loading equation...</span>
-                        )}
+                        <Latex formula={current.math} display />
                     </div>
                 </div>
 
