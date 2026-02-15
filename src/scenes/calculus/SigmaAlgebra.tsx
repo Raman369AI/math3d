@@ -3,14 +3,6 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ShieldCheck, Zap, BookOpen, Scale } from 'lucide-react';
 
-declare global {
-    interface Window {
-        katex?: {
-            render: (tex: string, element: HTMLElement, options?: Record<string, unknown>) => void;
-        };
-    }
-}
-
 interface LatexProps {
     formula: string;
     display?: boolean;
