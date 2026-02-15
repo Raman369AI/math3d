@@ -7,12 +7,10 @@ function NeuronLayer({
     count,
     x,
     color,
-    label,
 }: {
     count: number;
     x: number;
     color: string;
-    label: string;
 }) {
     const neurons: [number, number, number][] = [];
     const spacing = 1.2;
@@ -109,7 +107,7 @@ function NetworkScene() {
     return (
         <group ref={groupRef}>
             {layers.map((layer, i) => (
-                <NeuronLayer key={i} count={layer.count} x={layer.x} color={layer.color} label="" />
+                <NeuronLayer key={i} count={layer.count} x={layer.x} color={layer.color} />
             ))}
             {layers.slice(0, -1).map((layer, i) => (
                 <Connections

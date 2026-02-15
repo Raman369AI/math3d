@@ -47,7 +47,7 @@ function Surface({ functionType }: SurfaceProps) {
         }
         geo.computeVertexNormals();
         return geo;
-    }, [functionType]);
+    }, [f]);
 
     return (
         <mesh geometry={geometry}>
@@ -119,7 +119,7 @@ function IntegrationVisualization({ mode, functionType, resolution }: Integratio
         }
 
         return boxData;
-    }, [mode, functionType, resolution]);
+    }, [mode, resolution, f]);
 
     return (
         <group ref={groupRef}>

@@ -93,6 +93,9 @@ body {
 .sidebar-header {
   padding: 24px 20px;
   border-bottom: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .sidebar-logo {
@@ -247,6 +250,36 @@ body {
 
 .main-content::-webkit-scrollbar-thumb:hover {
   background: var(--border-glass-hover);
+}
+
+/* ===== Mobile Sidebar Toggle ===== */
+.mobile-sidebar-toggle {
+  display: none;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 50;
+  background: rgba(10, 10, 15, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.mobile-sidebar-toggle:hover {
+  background: var(--bg-glass-hover);
+  border-color: var(--border-glass-hover);
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+.sidebar-close-btn {
+  display: none;
 }
 
 /* ===== Hero Section ===== */
@@ -696,9 +729,33 @@ body {
     left: 0;
   }
 
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 90;
+    backdrop-filter: blur(2px);
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-sidebar-toggle {
+    display: flex;
+  }
+
   .hero {
     height: 40vh;
     min-height: 300px;
+  }
+
+  /* Make room for the toggle button */
+  .subtopic-view-header {
+      padding-left: 60px;
   }
 
   .home-topics {
@@ -706,7 +763,7 @@ body {
   }
 
   .topic-page {
-    padding: 24px;
+    padding: 24px 24px 24px 60px; /* More left padding for toggle if needed, or adjust based on layout */
   }
 
   .subtopic-grid {

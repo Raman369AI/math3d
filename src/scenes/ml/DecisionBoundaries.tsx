@@ -3,37 +3,37 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-function DataPoints() {
-    const points = useMemo(() => {
-        const pts: { pos: [number, number, number]; classId: number }[] = [];
-        // Class 0 cluster
-        for (let i = 0; i < 40; i++) {
-            pts.push({
-                pos: [
-                    -1.5 + (Math.random() - 0.5) * 2,
-                    -1 + (Math.random() - 0.5) * 2,
-                    (Math.random() - 0.5) * 2,
-                ],
-                classId: 0,
-            });
-        }
-        // Class 1 cluster
-        for (let i = 0; i < 40; i++) {
-            pts.push({
-                pos: [
-                    1.5 + (Math.random() - 0.5) * 2,
-                    1 + (Math.random() - 0.5) * 2,
-                    (Math.random() - 0.5) * 2,
-                ],
-                classId: 1,
-            });
-        }
-        return pts;
-    }, []);
+const POINTS = (() => {
+    const pts: { pos: [number, number, number]; classId: number }[] = [];
+    // Class 0 cluster
+    for (let i = 0; i < 40; i++) {
+        pts.push({
+            pos: [
+                -1.5 + (Math.random() - 0.5) * 2,
+                -1 + (Math.random() - 0.5) * 2,
+                (Math.random() - 0.5) * 2,
+            ],
+            classId: 0,
+        });
+    }
+    // Class 1 cluster
+    for (let i = 0; i < 40; i++) {
+        pts.push({
+            pos: [
+                1.5 + (Math.random() - 0.5) * 2,
+                1 + (Math.random() - 0.5) * 2,
+                (Math.random() - 0.5) * 2,
+            ],
+            classId: 1,
+        });
+    }
+    return pts;
+})();
 
+function DataPoints() {
     return (
         <>
-            {points.map((pt, i) => (
+            {POINTS.map((pt, i) => (
                 <mesh key={i} position={pt.pos}>
                     <sphereGeometry args={[0.08, 12, 12]} />
                     <meshStandardMaterial
