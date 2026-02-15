@@ -4,6 +4,7 @@ import { Line, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { Arrow } from '../../components/3d/Arrow';
 import { Label } from '../../components/3d/Label';
+import { generateEllipsePoints } from '../../utils/geometry';
 
 function EigenvisualizationScene() {
     const groupRef = useRef<THREE.Group>(null!);
@@ -20,12 +21,7 @@ function EigenvisualizationScene() {
     });
 
     const ellipsoidPoints = useMemo(() => {
-        const points: [number, number, number][] = [];
-        for (let i = 0; i <= 64; i++) {
-            const theta = (i / 64) * Math.PI * 2;
-            points.push([Math.cos(theta) * 2, Math.sin(theta) * 1.2, 0]);
-        }
-        return points;
+        return generateEllipsePoints(2, 1.2, 64);
     }, []);
 
     return (

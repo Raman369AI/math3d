@@ -2,6 +2,7 @@ import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, Line } from '@react-three/drei';
 import * as THREE from 'three';
+import { getNeuronPositions } from '../../utils/neural-network';
 
 function NeuronLayer({
     count,
@@ -12,13 +13,7 @@ function NeuronLayer({
     x: number;
     color: string;
 }) {
-    const neurons: [number, number, number][] = [];
-    const spacing = 1.2;
-    const offset = ((count - 1) * spacing) / 2;
-
-    for (let i = 0; i < count; i++) {
-        neurons.push([x, i * spacing - offset, 0]);
-    }
+    const neurons = getNeuronPositions(count, x);
 
     return (
         <>
@@ -98,12 +93,6 @@ function NetworkScene() {
         { count: 2, x: 3, color: '#00cec9' },
     ];
 
-    const getPositions = (count: number, x: number): [number, number, number][] => {
-        const spacing = 1.2;
-        const offset = ((count - 1) * spacing) / 2;
-        return Array.from({ length: count }, (_, i) => [x, i * spacing - offset, 0] as [number, number, number]);
-    };
-
     return (
         <group ref={groupRef}>
             {layers.map((layer, i) => (
@@ -112,8 +101,8 @@ function NetworkScene() {
             {layers.slice(0, -1).map((layer, i) => (
                 <Connections
                     key={i}
-                    fromPositions={getPositions(layer.count, layer.x)}
-                    toPositions={getPositions(layers[i + 1].count, layers[i + 1].x)}
+                    fromPositions={getNeuronPositions(layer.count, layer.x)}
+                    toPositions={getNeuronPositions(layers[i + 1].count, layers[i + 1].x)}
                     color="#444"
                 />
             ))}
