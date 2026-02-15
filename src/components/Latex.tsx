@@ -1,16 +1,18 @@
 import { useEffect, useRef } from 'react';
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
 
 interface LatexProps {
     formula: string;
     display?: boolean;
 }
 
-export function Latex({ formula, display = false }: LatexProps) {
+export default function Latex({ formula, display = false }: LatexProps) {
     const containerRef = useRef<HTMLSpanElement>(null);
 
     useEffect(() => {
-        if (containerRef.current && window.katex) {
-            window.katex.render(formula, containerRef.current, {
+        if (containerRef.current) {
+            katex.render(formula, containerRef.current, {
                 throwOnError: false,
                 displayMode: display,
             });
