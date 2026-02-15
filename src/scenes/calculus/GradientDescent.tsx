@@ -2,6 +2,7 @@ import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
+import { calculateLoss } from '../../utils/math';
 
 function LossSurface() {
     const geometry = useMemo(() => {
@@ -10,7 +11,7 @@ function LossSurface() {
         for (let i = 0; i < pos.count; i++) {
             const x = pos.getX(i);
             const y = pos.getY(i);
-            const z = (x * x + y * y) * 0.12 + Math.sin(x) * Math.cos(y) * 0.3;
+            const z = calculateLoss(x, y);
             pos.setZ(i, z);
         }
         geo.computeVertexNormals();
@@ -48,7 +49,7 @@ function DescentBall() {
         const angle = t * 0.8;
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
-        const y = (x * x + z * z) * 0.12 + Math.sin(x) * Math.cos(z) * 0.3 + 0.1;
+        const y = calculateLoss(x, z) + 0.1;
 
         ref.current.position.set(x, y, z);
     });

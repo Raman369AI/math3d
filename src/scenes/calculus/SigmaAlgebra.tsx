@@ -2,44 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ShieldCheck, Zap, BookOpen, Scale } from 'lucide-react';
-
-declare global {
-    interface Window {
-        katex?: {
-            render: (tex: string, element: HTMLElement, options?: Record<string, unknown>) => void;
-        };
-    }
-}
-
-interface LatexProps {
-    formula: string;
-    display?: boolean;
-}
-
-function Latex({ formula, display = false }: LatexProps) {
-    const containerRef = useRef<HTMLSpanElement>(null);
-
-    useEffect(() => {
-        if (containerRef.current && window.katex) {
-            window.katex.render(formula, containerRef.current, {
-                throwOnError: false,
-                displayMode: display,
-            });
-        }
-    }, [formula, display]);
-
-    return (
-        <span
-            ref={containerRef}
-            style={{
-                display: display ? 'block' : 'inline-block',
-                margin: display ? '16px 0' : '0',
-                textAlign: display ? 'center' : 'left',
-                overflowX: 'auto',
-            }}
-        />
-    );
-}
+import Latex from '../../components/Latex';
 
 type SigmaMode = 'atoms' | 'complement' | 'union' | 'universe';
 
@@ -154,24 +117,6 @@ function SigmaScene({ level, mode }: SigmaSceneProps) {
 export default function SigmaAlgebra() {
     const [sigmaLevel, setSigmaLevel] = useState(2);
     const [sigmaMode, setSigmaMode] = useState<SigmaMode>('atoms');
-    const [katexLoaded, setKatexLoaded] = useState(false);
-
-    useEffect(() => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css';
-        document.head.appendChild(link);
-
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js';
-        script.onload = () => setKatexLoaded(true);
-        document.head.appendChild(script);
-
-        return () => {
-            document.head.removeChild(link);
-            document.head.removeChild(script);
-        };
-    }, []);
 
     const getModeDescription = () => {
         switch (sigmaMode) {
@@ -182,9 +127,7 @@ export default function SigmaAlgebra() {
             case 'union':
                 return "Rule III: The 'sigma' (σ) means countable. If you can measure pieces A, B, and C, you must be able to measure their combined blob.";
             case 'atoms':
-                return katexLoaded
-                    ? 'A σ-algebra defines your "pixel resolution". Higher level means more atoms, allowing you to measure finer details of the space.'
-                    : 'A sigma-algebra defines your "pixel resolution". Higher level means more atoms, allowing you to measure finer details of the space.';
+                return 'A σ-algebra defines your "pixel resolution". Higher level means more atoms, allowing you to measure finer details of the space.';
         }
     };
 
@@ -227,7 +170,7 @@ export default function SigmaAlgebra() {
                     >
                         <ShieldCheck size={24} style={{ color: '#6c5ce7' }} />
                         <span>
-                            {katexLoaded ? <Latex formula="\sigma" /> : 'σ'}-Algebra
+                            <Latex formula="\sigma" />-Algebra
                         </span>
                     </h2>
                     <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.6 }}>
@@ -246,7 +189,7 @@ export default function SigmaAlgebra() {
                 >
                     <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6 }}>
                         To prevent mathematical paradoxes, we define a{' '}
-                        <strong>{katexLoaded ? <Latex formula="\sigma" /> : 'σ'}-algebra</strong>: the collection
+                        <strong><Latex formula="\sigma" />-algebra</strong>: the collection
                         of &quot;legal&quot; shapes we can measure.
                     </p>
                 </div>
@@ -258,7 +201,7 @@ export default function SigmaAlgebra() {
                         onClick={() => setSigmaMode('universe')}
                         number="I"
                         title="Universe Rule"
-                        formula={katexLoaded ? <Latex formula="\emptyset, \Omega \in \mathcal{F}" /> : '∅, Ω ∈ F'}
+                        formula={<Latex formula="\emptyset, \Omega \in \mathcal{F}" />}
                     />
                     <RuleButton
                         active={sigmaMode === 'complement'}
@@ -266,19 +209,15 @@ export default function SigmaAlgebra() {
                         number="II"
                         title="Complement Rule"
                         formula={
-                            katexLoaded ? (
-                                <Latex formula="A \in \mathcal{F} \implies A^c \in \mathcal{F}" />
-                            ) : (
-                                'A ∈ F ⟹ Aᶜ ∈ F'
-                            )
+                            <Latex formula="A \in \mathcal{F} \implies A^c \in \mathcal{F}" />
                         }
                     />
                     <RuleButton
                         active={sigmaMode === 'union'}
                         onClick={() => setSigmaMode('union')}
                         number="III"
-                        title={['Countable Union (', katexLoaded ? <Latex formula="\sigma" /> : 'σ', ')']}
-                        formula={katexLoaded ? <Latex formula="\bigcup A_n \in \mathcal{F}" /> : '⋃ Aₙ ∈ F'}
+                        title={['Countable Union (', <Latex key="sigma" formula="\sigma" />, ')']}
+                        formula={<Latex formula="\bigcup A_n \in \mathcal{F}" />}
                     />
                     <RuleButton
                         active={sigmaMode === 'atoms'}
@@ -413,7 +352,7 @@ export default function SigmaAlgebra() {
                         The Banach-Tarski &quot;Crime Scene&quot;
                     </h3>
                     <p style={{ fontSize: '14px', color: '#c7d2fe', lineHeight: 1.6, marginBottom: '24px' }}>
-                        Without a <strong>{katexLoaded ? <Latex formula="\sigma" /> : 'σ'}-algebra</strong>, you
+                        Without a <strong><Latex formula="\sigma" />-algebra</strong>, you
                         could use the <strong>Axiom of Choice</strong> to pick an <em>uncountable</em> number of
                         points from a sphere and rearrange them into <strong>two identical spheres</strong>.
                     </p>
@@ -431,7 +370,7 @@ export default function SigmaAlgebra() {
                             </p>
                             <p style={{ fontSize: '12px', lineHeight: 1.5 }}>
                                 The 5 pieces are created using &quot;uncountable&quot; selections. They aren&apos;t
-                                in the {katexLoaded ? <Latex formula="\sigma" /> : 'σ'}-algebra.
+                                in the <Latex formula="\sigma" />-algebra.
                             </p>
                         </div>
                         <div
@@ -446,7 +385,7 @@ export default function SigmaAlgebra() {
                                 The Consequence
                             </p>
                             <p style={{ fontSize: '12px', lineHeight: 1.5 }}>
-                                Because they aren&apos;t in the {katexLoaded ? <Latex formula="\sigma" /> : 'σ'}
+                                Because they aren&apos;t in the <Latex formula="\sigma" />
                                 -algebra, they have <strong>no defined volume</strong>. Math can&apos;t
                                 &quot;see&quot; them.
                             </p>
@@ -496,7 +435,7 @@ export default function SigmaAlgebra() {
                             <span>Deep Dive: The Mathematical Rules</span>
                         </h3>
                         <p style={{ fontSize: '14px', color: '#94a3b8', fontStyle: 'italic', maxWidth: '600px', margin: '0 auto' }}>
-                            A {katexLoaded ? <Latex formula="\sigma" /> : 'σ'}-algebra defines which subsets of a
+                            A <Latex formula="\sigma" />-algebra defines which subsets of a
                             space are &quot;legal&quot; to calculate probabilities or volumes.
                         </p>
                     </div>
@@ -525,9 +464,9 @@ export default function SigmaAlgebra() {
                                     The Universe Rule
                                 </h4>
                                 <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6 }}>
-                                    The empty set {katexLoaded ? <Latex formula="\emptyset" /> : '∅'} and the entire
-                                    space {katexLoaded ? <Latex formula="X" /> : 'X'} must be in{' '}
-                                    {katexLoaded ? <Latex formula="\mathcal{F}" /> : 'F'}.{' '}
+                                    The empty set <Latex formula="\emptyset" /> and the entire
+                                    space <Latex formula="X" /> must be in{' '}
+                                    <Latex formula="\mathcal{F}" />.{' '}
                                     <strong>Intuition:</strong> You must be able to say the volume of &quot;nothing&quot; is 0 and &quot;everything&quot; is 100%.
                                 </p>
                             </div>
@@ -555,9 +494,9 @@ export default function SigmaAlgebra() {
                                     The Complement Rule
                                 </h4>
                                 <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6 }}>
-                                    If {katexLoaded ? <Latex formula="A \in \mathcal{F}" /> : 'A ∈ F'}, then{' '}
-                                    {katexLoaded ? <Latex formula="A^c" /> : 'Aᶜ'} must be in{' '}
-                                    {katexLoaded ? <Latex formula="\mathcal{F}" /> : 'F'}.{' '}
+                                    If <Latex formula="A \in \mathcal{F}" />, then{' '}
+                                    <Latex formula="A^c" /> must be in{' '}
+                                    <Latex formula="\mathcal{F}" />.{' '}
                                     <strong>Intuition:</strong> If you can measure a circle, you must measure the square minus that circle.
                                 </p>
                             </div>
@@ -585,9 +524,9 @@ export default function SigmaAlgebra() {
                                     The Countable Union Rule
                                 </h4>
                                 <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6 }}>
-                                    If {katexLoaded ? <Latex formula="A_1, A_2, \dots \in \mathcal{F}" /> : 'A₁, A₂, ... ∈ F'}, then{' '}
-                                    {katexLoaded ? <Latex formula="\bigcup A_n \in \mathcal{F}" /> : '⋃ Aₙ ∈ F'}.{' '}
-                                    <strong>Intuition:</strong> The {katexLoaded ? <Latex formula="\sigma" /> : 'σ'} stands for countable. Add infinite sequences of pieces, result is still measurable.
+                                    If <Latex formula="A_1, A_2, \dots \in \mathcal{F}" />, then{' '}
+                                    <Latex formula="\bigcup A_n \in \mathcal{F}" />.{' '}
+                                    <strong>Intuition:</strong> The <Latex formula="\sigma" /> stands for countable. Add infinite sequences of pieces, result is still measurable.
                                 </p>
                             </div>
                         </div>
@@ -630,7 +569,7 @@ export default function SigmaAlgebra() {
                                         fontSize: '12px',
                                     }}
                                 >
-                                    The "cheat" in Banach-Tarski uses <strong>uncountable</strong> selections. By staying within the {katexLoaded ? <Latex formula="\sigma" /> : 'σ'}-algebra, we ban the uncountable weirdness.
+                                    The "cheat" in Banach-Tarski uses <strong>uncountable</strong> selections. By staying within the <Latex formula="\sigma" />-algebra, we ban the uncountable weirdness.
                                 </div>
                             </div>
                         </div>
@@ -652,7 +591,7 @@ export default function SigmaAlgebra() {
                                 The &quot;Borel&quot; Standard in ML
                             </h4>
                             <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '12px' }}>
-                                In Machine Learning, we use the <strong>Borel {katexLoaded ? <Latex formula="\sigma" /> : 'σ'}-algebra</strong>. It contains all "open intervals" (like all numbers between 0 and 1).
+                                In Machine Learning, we use the <strong>Borel <Latex formula="\sigma" />-algebra</strong>. It contains all "open intervals" (like all numbers between 0 and 1).
                             </p>
                             <ul style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.8, paddingLeft: '20px' }}>
                                 <li>Includes every shape you could draw or code</li>
@@ -673,7 +612,7 @@ export default function SigmaAlgebra() {
                             </h4>
                             <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.9)', lineHeight: 1.6 }}>
                                 Measure Theory is the &quot;contract&quot; that says: &quot;As long as we stay inside
-                                this {katexLoaded ? <Latex formula="\sigma" /> : 'σ'}-algebra, 1 + 1 will always
+                                this <Latex formula="\sigma" />-algebra, 1 + 1 will always
                                 equal 2, and our probabilities will always sum to 1.&quot;
                             </p>
                         </div>
