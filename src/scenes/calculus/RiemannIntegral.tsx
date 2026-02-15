@@ -4,13 +4,6 @@ import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { Activity, Info } from 'lucide-react';
 
-declare global {
-    interface Window {
-        katex?: {
-            render: (tex: string, element: HTMLElement, options?: Record<string, unknown>) => void;
-        };
-    }
-}
 
 interface LatexProps {
     formula: string;
