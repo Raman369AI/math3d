@@ -1,8 +1,9 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useLayoutEffect, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { Activity, Info } from 'lucide-react';
+import { calculateRiemannBoxes } from './riemannUtils.ts';
 
 
 interface LatexProps {
@@ -51,20 +52,12 @@ function RiemannScene({ nPartitions }: RiemannSceneProps) {
     }, []);
 
     const boxes = useMemo(() => {
-        const start = -4;
-        const end = 4;
-        const dx = (end - start) / nPartitions;
-        const boxData: Array<{ position: [number, number, number]; scale: [number, number, number] }> = [];
-
-        for (let i = 0; i < nPartitions; i++) {
-            const x = start + i * dx + dx / 2;
-            const h = Math.sin(x) + 2;
-            boxData.push({
-                position: [x, h / 2, 0],
-                scale: [dx * 0.9, h, 0.5],
-            });
-        }
-        return boxData;
+        return calculateRiemannBoxes(
+            -4,
+            4,
+            nPartitions,
+            (x) => Math.sin(x) + 2
+        );
     }, [nPartitions]);
 
     useLayoutEffect(() => {
