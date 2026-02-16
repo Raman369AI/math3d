@@ -191,8 +191,9 @@ function InfoPanel({
                 left: 0,
                 width: '360px',
                 height: '100%',
-                background: '#0f172a',
-                borderRight: '1px solid #1e293b',
+                background: 'rgba(5, 5, 8, 0.8)',
+                backdropFilter: 'blur(12px)',
+                borderRight: '1px solid rgba(255, 255, 255, 0.06)',
                 color: '#f8fafc',
                 fontFamily: 'Inter, system-ui, sans-serif',
                 overflowY: 'auto',
@@ -225,8 +226,8 @@ function InfoPanel({
             {/* Controls */}
             <div
                 style={{
-                    background: '#1e293b',
-                    border: '1px solid #334155',
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.06)',
                     borderRadius: '12px',
                     padding: '16px',
                     display: 'flex',
@@ -253,7 +254,7 @@ function InfoPanel({
                         style={{
                             width: '100%',
                             padding: '8px 12px',
-                            background: '#0f172a',
+                            background: '#050508',
                             color: '#f8fafc',
                             border: '1px solid #334155',
                             borderRadius: '8px',
@@ -323,8 +324,8 @@ function InfoPanel({
             {/* Legend */}
             <div
                 style={{
-                    background: '#1e293b',
-                    border: '1px solid #334155',
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.06)',
                     borderRadius: '12px',
                     padding: '16px',
                     display: 'flex',
@@ -369,7 +370,7 @@ export default function TaylorRemainder() {
     const [func, setFunc] = useState<FunctionType>('sin');
 
     return (
-        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#0f172a' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#050508' }}>
             <Canvas
                 camera={{ position: [12, 8, 12], fov: 50 }}
                 dpr={[1, 1.5]}
@@ -378,7 +379,7 @@ export default function TaylorRemainder() {
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 10, 7]} intensity={0.8} />
 
-                <gridHelper args={[20, 20, '#334155', '#1e293b']} />
+                <gridHelper args={[20, 20, '#334155', '#0a0a0f']} />
 
                 <ErrorRibbon n={n} a={a} func={func} />
                 <FunctionLine func={func} n={n} a={a} isPolynomial={false} />

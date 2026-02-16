@@ -111,7 +111,7 @@ export default function GradientDescentML() {
             <LossLandscape />
             <DescentPath />
             <OrbitControls enableDamping dampingFactor={0.05} />
-            <fog attach="fog" args={['#0a0a0f', 6, 18]} />
+            <fog attach="fog" args={['#050508', 6, 18]} />
         </Canvas>
     );
 }

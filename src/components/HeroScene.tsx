@@ -100,7 +100,7 @@ export default function HeroScene() {
             <FloatingCube />
             <Particles />
 
-            <fog attach="fog" args={['#0a0a0f', 4, 12]} />
+            <fog attach="fog" args={['#050508', 4, 12]} />
         </Canvas>
     );
 }

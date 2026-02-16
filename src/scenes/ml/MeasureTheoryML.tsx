@@ -118,7 +118,7 @@ function FlowsScene({ isActive }: SceneProps) {
 
     return (
         <group>
-            <Grid infiniteGrid sectionColor="#3b82f6" cellColor="#1e293b" fadeDistance={20} />
+            <Grid infiniteGrid sectionColor="#3b82f6" cellColor="#0a0a0f" fadeDistance={20} />
             <instancedMesh ref={meshRef} args={[undefined, undefined, FLOW_COUNT]}>
                 <sphereGeometry args={[0.08, 8, 8]} />
                 <meshBasicMaterial />
@@ -141,7 +141,7 @@ function ReLUScene({ isActive }: SceneProps) {
 
     return (
         <group>
-            <Grid infiniteGrid sectionColor="#3b82f6" cellColor="#1e293b" fadeDistance={20} />
+            <Grid infiniteGrid sectionColor="#3b82f6" cellColor="#0a0a0f" fadeDistance={20} />
 
             <Line
                 points={points}
@@ -185,12 +185,12 @@ export default function MeasureTheoryML() {
     const current = sceneData[scene];
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#020617', color: '#e2e8f0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#050508', color: '#e2e8f0' }}>
 
             {/* Header / Controls */}
             <div style={{
                 padding: '24px',
-                borderBottom: '1px solid #1e293b',
+                borderBottom: '1px solid #0a0a0f',
                 display: 'flex',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
@@ -218,7 +218,7 @@ export default function MeasureTheoryML() {
                                 borderRadius: '8px',
                                 border: '1px solid',
                                 borderColor: scene === key ? '#3b82f6' : '#334155',
-                                backgroundColor: scene === key ? '#1d4ed8' : '#0f172a',
+                                backgroundColor: scene === key ? '#1d4ed8' : '#050508',
                                 color: scene === key ? 'white' : '#94a3b8',
                                 cursor: 'pointer',
                                 fontSize: '13px',
@@ -274,10 +274,10 @@ export default function MeasureTheoryML() {
                     </p>
 
                     <div style={{
-                        backgroundColor: '#020617',
+                        backgroundColor: '#050508',
                         padding: '12px',
                         borderRadius: '8px',
-                        border: '1px solid #1e293b',
+                        border: '1px solid #0a0a0f',
                         fontSize: '14px',
                         display: 'flex',
                         justifyContent: 'center'

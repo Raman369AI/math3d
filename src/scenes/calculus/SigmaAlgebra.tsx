@@ -95,7 +95,7 @@ export default function SigmaAlgebra() {
     };
 
     return (
-        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#0f172a', overflowY: 'auto' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#050508', overflowY: 'auto' }}>
             {/* Side Panel */}
             <div
                 style={{
@@ -104,8 +104,8 @@ export default function SigmaAlgebra() {
                     left: 0,
                     width: '400px',
                     height: '100%',
-                    background: '#0f172a',
-                    borderRight: '1px solid #1e293b',
+                    background: '#050508',
+                    borderRight: '1px solid #0a0a0f',
                     color: '#f8fafc',
                     fontFamily: 'Inter, system-ui, sans-serif',
                     overflowY: 'auto',
@@ -144,7 +144,7 @@ export default function SigmaAlgebra() {
                 {/* Main explanation */}
                 <div
                     style={{
-                        background: '#1e293b',
+                        background: '#0a0a0f',
                         border: '1px solid #334155',
                         borderRadius: '12px',
                         padding: '20px',
@@ -195,7 +195,7 @@ export default function SigmaAlgebra() {
                 {sigmaMode === 'atoms' && (
                     <div
                         style={{
-                            background: '#1e293b',
+                            background: '#0a0a0f',
                             border: '1px solid #334155',
                             borderRadius: '12px',
                             padding: '16px',
@@ -276,7 +276,7 @@ export default function SigmaAlgebra() {
                     bottom: 0,
                     overflowY: 'auto',
                     padding: '32px',
-                    background: '#0f172a',
+                    background: '#050508',
                 }}
             >
                 {/* Banach-Tarski Card */}
@@ -375,7 +375,7 @@ export default function SigmaAlgebra() {
                 {/* Deep Dive Section */}
                 <div
                     style={{
-                        background: '#1e293b',
+                        background: '#0a0a0f',
                         padding: '32px',
                         borderRadius: '24px',
                         border: '1px solid #334155',
@@ -605,7 +605,7 @@ function RuleButton({ active, onClick, number, title, formula }: RuleButtonProps
                 borderRadius: '12px',
                 border: '1px solid',
                 borderColor: active ? '#6c5ce7' : '#334155',
-                background: active ? '#6c5ce7' : '#1e293b',
+                background: active ? '#6c5ce7' : '#0a0a0f',
                 color: active ? '#fff' : '#cbd5e1',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
@@ -620,7 +620,7 @@ function RuleButton({ active, onClick, number, title, formula }: RuleButtonProps
             }}
             onMouseLeave={(e) => {
                 if (!active) {
-                    e.currentTarget.style.background = '#1e293b';
+                    e.currentTarget.style.background = '#0a0a0f';
                 }
             }}
         >

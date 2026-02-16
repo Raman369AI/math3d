@@ -38,6 +38,7 @@ export default function TopicPage() {
                         key={subtopic.id}
                         to={`/${topic.id}/${subtopic.id}`}
                         className={`subtopic-card fade-in-up stagger-${index + 1}`}
+                        onMouseEnter={() => subtopic.component.preload()}
                     >
                         <div className="subtopic-card-preview">
                             <SubtopicCardPreview color={topic.color} />

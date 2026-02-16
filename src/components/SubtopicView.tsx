@@ -2,11 +2,16 @@ import { Suspense } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getTopicById, getSubtopicById } from '../data/topics';
 
-function LoadingFallback() {
+function LoadingFallback({ color = '#6c5ce7' }: { color?: string }) {
     return (
         <div className="loading-screen">
-            <div className="loading-spinner" />
-            <span className="loading-text">Loading visualization…</span>
+            <div
+                className="loading-spinner"
+                style={{ borderTopColor: color }}
+            />
+            <span className="loading-text" style={{ color: '#94a3b8' }}>
+                Loading visualization...
+            </span>
         </div>
     );
 }
@@ -30,21 +35,22 @@ export default function SubtopicView() {
 
     const SceneComponent = subtopic.component;
 
+    // Pass the standard layout props to the scene? 
+    // No, the Scene itself should implement SceneContainer. 
+    // SubtopicView just acts as the mounter.
+
     return (
-        <div className="subtopic-view">
-            <div className="subtopic-view-header">
-                <Link to={`/${topic.id}`} className="subtopic-view-back">
-                    ←
-                </Link>
-                <span className="subtopic-view-title" style={{ color: topic.color }}>
-                    {topic.icon} {subtopic.title}
-                </span>
-            </div>
-            <div className="subtopic-view-canvas">
-                <Suspense fallback={<LoadingFallback />}>
-                    <SceneComponent />
-                </Suspense>
-            </div>
+        <div className="subtopic-view" style={{
+            width: '100%',
+            height: '100%',
+            overflow: 'hidden',
+            position: 'absolute',
+            top: 0,
+            left: 0
+        }}>
+            <Suspense fallback={<LoadingFallback color={topic.color} />}>
+                <SceneComponent />
+            </Suspense>
         </div>
     );
 }

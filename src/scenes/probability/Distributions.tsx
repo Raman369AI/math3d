@@ -1,7 +1,10 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { useParams } from 'react-router-dom';
 import * as THREE from 'three';
+import { SceneContainer } from '../../components/layout/SceneContainer';
+import { GlassPane } from '../../components/layout/GlassPane';
 
 function GaussianSurface() {
     const meshRef = useRef<THREE.Mesh>(null!);
@@ -69,16 +72,44 @@ function SamplePoints() {
 }
 
 export default function Distributions() {
+    const { topicId } = useParams<{ topicId: string }>();
+
+    const controls = (
+        <GlassPane>
+            <div style={{ padding: '16px', color: 'white' }}>
+                <h3 style={{ margin: 0, marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+                    Probability Distributions
+                </h3>
+                <div style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.5' }}>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#fd79a8' }}>Pink surface</span>: 2D Gaussian distribution
+                    </p>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#fdcb6e' }}>Yellow dots</span>: Random samples from the distribution
+                    </p>
+                    <p style={{ margin: '8px 0 0 0', fontSize: '12px', color: '#64748b' }}>
+                        Notice how samples cluster around the peak
+                    </p>
+                </div>
+            </div>
+        </GlassPane>
+    );
+
     return (
-        <Canvas camera={{ position: [4, 4, 4], fov: 50 }} style={{ width: '100%', height: '100%' }}>
-            <ambientLight intensity={0.4} />
-            <directionalLight position={[5, 5, 5]} intensity={0.8} />
-            <pointLight position={[-3, 2, 3]} intensity={0.5} color="#fd79a8" />
-            <GaussianSurface />
-            <SamplePoints />
-            <gridHelper args={[8, 16, '#222', '#181828']} position={[0, -0.01, 0]} />
-            <OrbitControls enableDamping dampingFactor={0.05} />
-            <fog attach="fog" args={['#0a0a0f', 5, 15]} />
-        </Canvas>
+        <SceneContainer
+            backUrl={`/${topicId || 'probability'}`}
+            controls={controls}
+        >
+            <Canvas camera={{ position: [4, 4, 4], fov: 50 }}>
+                <ambientLight intensity={0.4} />
+                <directionalLight position={[5, 5, 5]} intensity={0.8} />
+                <pointLight position={[-3, 2, 3]} intensity={0.5} color="#fd79a8" />
+                <GaussianSurface />
+                <SamplePoints />
+                <gridHelper args={[8, 16, '#222', '#181828']} position={[0, -0.01, 0]} />
+                <OrbitControls enableDamping dampingFactor={0.05} />
+                <fog attach="fog" args={['#050508', 5, 15]} />
+            </Canvas>
+        </SceneContainer>
     );
 }

@@ -58,7 +58,7 @@ export default function BayesTheorem() {
             <pointLight position={[-3, 2, 3]} intensity={0.5} color="#fd79a8" />
             <BayesBlocks />
             <OrbitControls enableDamping dampingFactor={0.05} />
-            <fog attach="fog" args={['#0a0a0f', 6, 18]} />
+            <fog attach="fog" args={['#050508', 6, 18]} />
         </Canvas>
     );
 }

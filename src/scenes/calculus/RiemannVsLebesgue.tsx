@@ -180,7 +180,7 @@ export default function RiemannVsLebesgue() {
     const legendText = mode === 'riemann' ? 'Riemann (Vertical Slicing)' : 'Lebesgue (Horizontal Slicing)';
 
     return (
-        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#020617' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#050508' }}>
             {/* Controls Panel */}
             <div
                 style={{
@@ -240,7 +240,7 @@ export default function RiemannVsLebesgue() {
                         <button
                             onClick={() => setFunctionType('smooth')}
                             style={{
-                                background: functionType === 'smooth' ? '#334155' : '#1e293b',
+                                background: functionType === 'smooth' ? '#334155' : '#0a0a0f',
                                 color: functionType === 'smooth' ? '#fff' : '#94a3b8',
                                 fontSize: '12px',
                                 padding: '4px 8px',
@@ -255,7 +255,7 @@ export default function RiemannVsLebesgue() {
                         <button
                             onClick={() => setFunctionType('spiky')}
                             style={{
-                                background: functionType === 'spiky' ? '#334155' : '#1e293b',
+                                background: functionType === 'spiky' ? '#334155' : '#0a0a0f',
                                 color: functionType === 'spiky' ? '#fff' : '#94a3b8',
                                 fontSize: '12px',
                                 padding: '4px 8px',
@@ -418,7 +418,7 @@ export default function RiemannVsLebesgue() {
                 camera={{ position: [20, 18, 20], fov: 60 }}
                 style={{ width: '100%', height: '100%' }}
             >
-                <color attach="background" args={['#020617']} />
+                <color attach="background" args={['#050508']} />
                 <Scene mode={mode} functionType={functionType} resolution={resolution} />
             </Canvas>
         </div>

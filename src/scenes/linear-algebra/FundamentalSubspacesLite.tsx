@@ -3,6 +3,9 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Arrow } from '../../components/3d/Arrow';
 import { Label } from '../../components/3d/Label';
+import { SceneContainer } from '../../components/layout/SceneContainer';
+import { GlassPane } from '../../components/layout/GlassPane';
+import { useParams } from 'react-router-dom';
 
 /* Simplified data */
 const DATA = {
@@ -43,84 +46,41 @@ function SceneBase() {
     );
 }
 
-/* Info panel */
-function InfoPanel({ mode, onModeChange }: { mode: ViewMode; onModeChange: (m: ViewMode) => void }) {
-    return (
-        <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '360px',
-            height: '100%',
-            background: '#0f172a',
-            borderRight: '1px solid #1e293b',
-            color: '#f8fafc',
-            fontFamily: 'Inter, system-ui, sans-serif',
-            overflowY: 'auto',
-            zIndex: 20,
-            padding: '28px 24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
-        }}>
+/* Main component */
+export default function FundamentalSpacesOptimized() {
+    const { topicId } = useParams();
+    const [mode, setMode] = useState<ViewMode>('domain');
+
+    const controls = (
+        <GlassPane className="scene-controls" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-                <h2 style={{
-                    fontSize: '22px',
-                    fontWeight: 800,
-                    background: 'linear-gradient(135deg, #818cf8, #34d399)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    marginBottom: '6px',
-                }}>
-                    Fundamental Subspaces (Optimized)
-                </h2>
-                <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.6 }}>
-                    Simplified view showing vector decomposition.
+                <h1 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white' }}>Fundamental Subspaces</h1>
+                <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.6 }}>
+                    Lite Version (Reduced GPU Load)
                 </p>
             </div>
 
-            <div style={{
-                background: '#1e293b',
-                border: '1px solid #334155',
-                borderRadius: '12px',
-                padding: '16px',
-            }}>
-                <p style={{ fontSize: '14px', fontFamily: 'JetBrains Mono', color: '#e2e8f0' }}>
-                    x = [3,3,3]<br />
-                    x_r = [1,4,2] (row space)<br />
-                    x_n = [2,-1,1] (null space)
+            <GlassPane style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid #334155', borderRadius: '12px', padding: '16px' }}>
+                <p style={{ fontSize: '12px', fontFamily: 'JetBrains Mono', color: '#e2e8f0', margin: 0, lineHeight: 1.8 }}>
+                    <span style={{ color: '#facc15' }}>x</span> = [3,3,3]<br />
+                    <span style={{ color: '#86efac' }}>x_r</span> = [1,4,2] (row space)<br />
+                    <span style={{ color: '#fca5a5' }}>x_n</span> = [2,-1,1] (null space)
                 </p>
-            </div>
+            </GlassPane>
 
-            <div style={{ display: 'flex', gap: '4px', background: '#1e293b', border: '1px solid #334155', borderRadius: '8px', padding: '4px' }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
                 <button
-                    onClick={() => onModeChange('domain')}
-                    style={{
-                        flex: 1,
-                        padding: '8px 0',
-                        fontSize: '13px',
-                        fontWeight: 600,
-                        borderRadius: '6px',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        background: mode === 'domain' ? '#4f46e5' : 'transparent',
-                        color: mode === 'domain' ? '#fff' : '#94a3b8',
-                    }}
+                    onClick={() => setMode('domain')}
+                    style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #334155', background: mode === 'domain' ? '#4f46e5' : '#1e293b', color: 'white', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
                 >
                     Domain (ℝ³)
                 </button>
             </div>
-        </div>
+        </GlassPane>
     );
-}
-
-/* Main component */
-export default function FundamentalSpacesOptimized() {
-    const [mode, setMode] = useState<ViewMode>('domain');
 
     return (
-        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#0f172a' }}>
+        <SceneContainer backUrl={`/${topicId}`} controls={controls}>
             <Canvas
                 camera={{ position: [8, 8, 8], fov: 50 }}
                 dpr={[1, 1.5]}
@@ -130,9 +90,9 @@ export default function FundamentalSpacesOptimized() {
                 <SceneBase />
                 <DomainView />
                 <OrbitControls />
+                <fog attach="fog" args={['#0b0f19', 10, 30]} />
+                <color attach="background" args={['#0b0f19']} />
             </Canvas>
-
-            <InfoPanel mode={mode} onModeChange={setMode} />
-        </div>
+        </SceneContainer>
     );
 }

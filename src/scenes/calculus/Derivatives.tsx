@@ -1,7 +1,10 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Line } from '@react-three/drei';
+import { useParams } from 'react-router-dom';
 import * as THREE from 'three';
+import { SceneContainer } from '../../components/layout/SceneContainer';
+import { GlassPane } from '../../components/layout/GlassPane';
 
 function Surface() {
     const meshRef = useRef<THREE.Mesh>(null!);
@@ -68,14 +71,45 @@ function Surface() {
 }
 
 export default function Derivatives() {
+    const { topicId } = useParams<{ topicId: string }>();
+
+    const controls = (
+        <GlassPane>
+            <div style={{ padding: '16px', color: 'white' }}>
+                <h3 style={{ margin: 0, marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+                    Derivatives
+                </h3>
+                <div style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.5' }}>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        Function: z = sin(x) × cos(y)
+                    </p>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#fdcb6e' }}>Yellow dot</span>: Moving point on surface
+                    </p>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#fd79a8' }}>Pink line</span>: Tangent line showing rate of change
+                    </p>
+                    <p style={{ margin: '8px 0 0 0', fontSize: '12px', color: '#64748b' }}>
+                        The derivative represents the slope at each point
+                    </p>
+                </div>
+            </div>
+        </GlassPane>
+    );
+
     return (
-        <Canvas camera={{ position: [4, 3, 4], fov: 50 }} style={{ width: '100%', height: '100%' }}>
-            <ambientLight intensity={0.4} />
-            <directionalLight position={[5, 5, 5]} intensity={0.8} />
-            <pointLight position={[-3, 2, 3]} intensity={0.5} color="#00cec9" />
-            <Surface />
-            <OrbitControls enableDamping dampingFactor={0.05} />
-            <fog attach="fog" args={['#0a0a0f', 5, 15]} />
-        </Canvas>
+        <SceneContainer
+            backUrl={`/${topicId || 'calculus'}`}
+            controls={controls}
+        >
+            <Canvas camera={{ position: [4, 3, 4], fov: 50 }}>
+                <ambientLight intensity={0.4} />
+                <directionalLight position={[5, 5, 5]} intensity={0.8} />
+                <pointLight position={[-3, 2, 3]} intensity={0.5} color="#00cec9" />
+                <Surface />
+                <OrbitControls enableDamping dampingFactor={0.05} />
+                <fog attach="fog" args={['#050508', 5, 15]} />
+            </Canvas>
+        </SceneContainer>
     );
 }

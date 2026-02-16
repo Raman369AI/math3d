@@ -4,6 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { Activity, Info } from 'lucide-react';
 import Latex from '../../components/Latex';
+import { calculateRiemannBoxes } from './riemannUtils';
 
 interface RiemannSceneProps {
     nPartitions: number;
@@ -25,7 +26,7 @@ function RiemannScene({ nPartitions }: RiemannSceneProps) {
             -4,
             4,
             nPartitions,
-            (x) => Math.sin(x) + 2
+            (x: number) => Math.sin(x) + 2
         );
     }, [nPartitions]);
 
@@ -34,8 +35,8 @@ function RiemannScene({ nPartitions }: RiemannSceneProps) {
         const tempObject = new THREE.Object3D();
         for (let i = 0; i < boxes.length; i++) {
             const box = boxes[i];
-            tempObject.position.set(...box.position);
-            tempObject.scale.set(...box.scale);
+            tempObject.position.set(box.position[0], box.position[1], box.position[2]);
+            tempObject.scale.set(box.scale[0], box.scale[1], box.scale[2]);
             tempObject.updateMatrix();
             meshRef.current.setMatrixAt(i, tempObject.matrix);
         }
@@ -50,7 +51,7 @@ function RiemannScene({ nPartitions }: RiemannSceneProps) {
 
     return (
         <>
-            <gridHelper args={[10, 10, 0xcbd5e1, 0xf1f5f9]} />
+            <gridHelper args={[10, 10, 0x555570, 0x1e293b]} />
 
             {/* Function curve */}
             <line>
@@ -60,18 +61,19 @@ function RiemannScene({ nPartitions }: RiemannSceneProps) {
                         args={[new Float32Array(curvePoints.flatMap((p) => [p.x, p.y, p.z])), 3]}
                     />
                 </bufferGeometry>
-                <lineBasicMaterial color={0x3b82f6} linewidth={3} />
+                <lineBasicMaterial color={0x00cec9} linewidth={3} />
             </line>
 
             {/* Riemann boxes */}
             <instancedMesh ref={meshRef} args={[undefined, undefined, boxes.length]}>
                 <boxGeometry args={[1, 1, 1]} />
-                <meshPhongMaterial color={0x60a5fa} transparent opacity={0.7} />
+                <meshPhongMaterial color={0x6c5ce7} transparent opacity={0.5} />
             </instancedMesh>
 
             <directionalLight position={[5, 5, 5]} intensity={1} />
             <ambientLight intensity={0.4} />
             <OrbitControls enableDamping dampingFactor={0.05} />
+            <fog attach="fog" args={['#050508', 5, 15]} />
         </>
     );
 }
@@ -80,7 +82,7 @@ export default function RiemannIntegral() {
     const [riemannN, setRiemannN] = useState(12);
 
     return (
-        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#0f172a' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#050508' }}>
             <div
                 style={{
                     position: 'absolute',
@@ -88,8 +90,9 @@ export default function RiemannIntegral() {
                     left: 0,
                     width: '400px',
                     height: '100%',
-                    background: '#0f172a',
-                    borderRight: '1px solid #1e293b',
+                    background: 'rgba(5, 5, 8, 0.8)',
+                    backdropFilter: 'blur(12px)',
+                    borderRight: '1px solid rgba(255, 255, 255, 0.06)',
                     color: '#f8fafc',
                     fontFamily: 'Inter, system-ui, sans-serif',
                     overflowY: 'auto',
@@ -105,7 +108,7 @@ export default function RiemannIntegral() {
                         style={{
                             fontSize: '24px',
                             fontWeight: 800,
-                            background: 'linear-gradient(135deg, #00cec9, #81ecec)',
+                            background: 'linear-gradient(135deg, #00cec9, #6c5ce7)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             marginBottom: '8px',
@@ -125,8 +128,8 @@ export default function RiemannIntegral() {
                 {/* Main explanation */}
                 <div
                     style={{
-                        background: '#1e293b',
-                        border: '1px solid #334155',
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        border: '1px solid rgba(255, 255, 255, 0.06)',
                         borderRadius: '12px',
                         padding: '20px',
                     }}
@@ -167,8 +170,8 @@ export default function RiemannIntegral() {
                 {/* Partition control */}
                 <div
                     style={{
-                        background: '#1e293b',
-                        border: '1px solid #334155',
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        border: '1px solid rgba(255, 255, 255, 0.06)',
                         borderRadius: '12px',
                         padding: '16px',
                     }}
@@ -209,8 +212,8 @@ export default function RiemannIntegral() {
                 {/* Why it fails */}
                 <div
                     style={{
-                        background: 'rgba(239, 68, 68, 0.1)',
-                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                        background: 'rgba(239, 68, 68, 0.05)',
+                        border: '1px solid rgba(239, 68, 68, 0.2)',
                         borderRadius: '12px',
                         padding: '16px',
                     }}
@@ -238,8 +241,8 @@ export default function RiemannIntegral() {
                 {/* Legend */}
                 <div
                     style={{
-                        background: '#1e293b',
-                        border: '1px solid #334155',
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        border: '1px solid rgba(255, 255, 255, 0.06)',
                         borderRadius: '12px',
                         padding: '16px',
                     }}
@@ -253,7 +256,7 @@ export default function RiemannIntegral() {
                                 style={{
                                     width: '24px',
                                     height: '3px',
-                                    background: '#3b82f6',
+                                    background: '#00cec9',
                                     borderRadius: '2px',
                                 }}
                             />
@@ -264,7 +267,7 @@ export default function RiemannIntegral() {
                                 style={{
                                     width: '24px',
                                     height: '16px',
-                                    background: 'rgba(96, 165, 250, 0.7)',
+                                    background: 'rgba(108, 92, 231, 0.5)',
                                     borderRadius: '3px',
                                 }}
                             />
@@ -284,7 +287,7 @@ export default function RiemannIntegral() {
                 }}
             >
                 <Canvas camera={{ position: [0, 4, 8], fov: 75 }} style={{ width: '100%', height: '100%' }}>
-                    <color attach="background" args={['#f8fafc']} />
+                    <color attach="background" args={['#050508']} />
                     <RiemannScene nPartitions={riemannN} />
                 </Canvas>
             </div>

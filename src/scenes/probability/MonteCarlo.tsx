@@ -70,7 +70,7 @@ export default function MonteCarlo() {
             <BoundingBox />
             <MonteCarloPoints />
             <OrbitControls enableDamping dampingFactor={0.05} />
-            <fog attach="fog" args={['#0a0a0f', 5, 15]} />
+            <fog attach="fog" args={['#050508', 5, 15]} />
         </Canvas>
     );
 }

@@ -2,6 +2,10 @@ import { useState, useMemo, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
+import { SceneContainer } from '../../components/layout/SceneContainer';
+import { GlassPane } from '../../components/layout/GlassPane';
+import { useParams } from 'react-router-dom';
+import { RefreshCcw, Split, Combine } from 'lucide-react';
 
 const PIECE_COUNT = 5;
 const COLORS = [0xef4444, 0x3b82f6, 0x10b981, 0xf59e0b, 0x8b5cf6];
@@ -115,202 +119,6 @@ function Scene({ animationProgress }: { animationProgress: React.MutableRefObjec
     );
 }
 
-function InfoPanel({
-    isSplit,
-    onUnify,
-    onSplit,
-}: {
-    isSplit: boolean;
-    onUnify: () => void;
-    onSplit: () => void;
-}) {
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                width: '360px',
-                height: '100%',
-                background: '#0f172a',
-                borderLeft: '1px solid #1e293b',
-                color: '#f8fafc',
-                fontFamily: 'Inter, system-ui, sans-serif',
-                overflowY: 'auto',
-                zIndex: 20,
-                padding: '28px 24px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-            }}
-        >
-            <div>
-                <h2
-                    style={{
-                        fontSize: '22px',
-                        fontWeight: 800,
-                        background: 'linear-gradient(135deg, #6c5ce7, #a29bfe)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        marginBottom: '6px',
-                    }}
-                >
-                    Banach-Tarski Paradox
-                </h2>
-                <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.6 }}>
-                    The impossibility made possible through infinite decomposition
-                </p>
-            </div>
-
-            {/* Controls */}
-            <div
-                style={{
-                    background: '#1e293b',
-                    border: '1px solid #334155',
-                    borderRadius: '12px',
-                    padding: '16px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px',
-                }}
-            >
-                <button
-                    onClick={onUnify}
-                    disabled={!isSplit}
-                    style={{
-                        width: '100%',
-                        padding: '12px 24px',
-                        background: isSplit ? '#3b82f6' : '#334155',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: isSplit ? 'pointer' : 'not-allowed',
-                        fontWeight: 600,
-                        fontSize: '14px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    }}
-                >
-                    Unify
-                </button>
-                <button
-                    onClick={onSplit}
-                    disabled={isSplit}
-                    style={{
-                        width: '100%',
-                        padding: '12px 24px',
-                        background: !isSplit ? '#3b82f6' : '#334155',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: !isSplit ? 'pointer' : 'not-allowed',
-                        fontWeight: 600,
-                        fontSize: '14px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    }}
-                >
-                    Decompose &amp; Double
-                </button>
-            </div>
-
-            {/* Explanation */}
-            <div
-                style={{
-                    background: '#1e293b',
-                    border: '1px solid #334155',
-                    borderRadius: '12px',
-                    padding: '16px',
-                }}
-            >
-                <h3
-                    style={{
-                        fontSize: '14px',
-                        fontWeight: 700,
-                        color: '#6c5ce7',
-                        marginBottom: '12px',
-                    }}
-                >
-                    How is this possible?
-                </h3>
-                <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '12px' }}>
-                    In standard geometry, volume is preserved. But the paradox uses the{' '}
-                    <strong style={{ color: '#f8fafc' }}>Axiom of Choice</strong> to create pieces that
-                    are so infinitely &quot;jagged&quot; they have no measurable volume.
-                </p>
-                <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6 }}>
-                    By rotating these pieces around specific axes, the points &quot;re-align&quot; to
-                    fill two whole spheres without any gaps. It&apos;s like taking the infinite points
-                    of one line and mapping them onto two lines.
-                </p>
-            </div>
-
-            {/* Mathematical Details */}
-            <div
-                style={{
-                    background: '#1e293b',
-                    border: '1px solid #334155',
-                    borderRadius: '12px',
-                    padding: '16px',
-                }}
-            >
-                <h3
-                    style={{
-                        fontSize: '14px',
-                        fontWeight: 700,
-                        color: '#6c5ce7',
-                        marginBottom: '12px',
-                    }}
-                >
-                    The Mathematics
-                </h3>
-                <ul
-                    style={{
-                        fontSize: '13px',
-                        color: '#cbd5e1',
-                        lineHeight: 1.8,
-                        paddingLeft: '20px',
-                        margin: 0,
-                    }}
-                >
-                    <li>Relies on the Axiom of Choice (AC)</li>
-                    <li>Pieces are non-measurable sets</li>
-                    <li>Only works in 3D and higher dimensions</li>
-                    <li>Impossible with physical objects</li>
-                    <li>Demonstrated by Banach &amp; Tarski (1924)</li>
-                </ul>
-            </div>
-
-            {/* Visual Legend */}
-            <div
-                style={{
-                    background: '#1e293b',
-                    border: '1px solid #334155',
-                    borderRadius: '12px',
-                    padding: '16px',
-                }}
-            >
-                <h3
-                    style={{
-                        fontSize: '14px',
-                        fontWeight: 700,
-                        color: '#6c5ce7',
-                        marginBottom: '12px',
-                    }}
-                >
-                    Visualization
-                </h3>
-                <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6 }}>
-                    Each color represents one of the 5 pieces. When decomposed, each piece is duplicated
-                    and rotated to form two complete spheres.
-                </p>
-            </div>
-        </div>
-    );
-}
-
 function AnimationController({
     isSplit,
     progressRef,
@@ -327,11 +135,47 @@ function AnimationController({
 }
 
 export default function BanachTarski() {
+    const { topicId } = useParams();
     const [isSplit, setIsSplit] = useState(false);
     const animationProgressRef = useRef(0);
 
+    const controls = (
+        <GlassPane className="scene-controls" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div>
+                <h1 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white' }}>Banach-Tarski Paradox</h1>
+                <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.6 }}>
+                    The impossibility made possible through infinite decomposition.
+                </p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <button
+                    onClick={() => setIsSplit(false)}
+                    disabled={!isSplit}
+                    style={{ padding: '12px', borderRadius: '8px', border: '1px solid #334155', background: !isSplit ? '#1e293b' : '#334155', color: !isSplit ? '#94a3b8' : 'white', fontSize: '13px', fontWeight: 600, cursor: isSplit ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: isSplit ? 1 : 0.5 }}
+                >
+                    <Combine size={16} /> Unify Sphere
+                </button>
+                <button
+                    onClick={() => setIsSplit(true)}
+                    disabled={isSplit}
+                    style={{ padding: '12px', borderRadius: '8px', border: '1px solid #334155', background: isSplit ? '#1e293b' : '#3b82f6', color: 'white', fontSize: '13px', fontWeight: 600, cursor: !isSplit ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: !isSplit ? 1 : 0.5 }}
+                >
+                    <Split size={16} /> Decompose & Double
+                </button>
+            </div>
+
+            <GlassPane style={{ background: 'rgba(99, 102, 241, 0.1)', border: '1px solid rgba(99, 102, 241, 0.3)', padding: '14px' }}>
+                <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#a5b4fc', marginBottom: '6px' }}>How is this possible?</h4>
+                <p style={{ fontSize: '12px', color: '#cbd5e1', lineHeight: 1.6, margin: 0 }}>
+                    Using the <strong>Axiom of Choice</strong>, we decompose the sphere into non-measurable sets. Rotating these "jagged" pieces re-aligns them to fill two whole spheres.
+                </p>
+            </GlassPane>
+        </GlassPane>
+    );
+
     return (
-        <div style={{ width: '100%', height: '100%', position: 'relative', background: '#0f172a' }}>
+        <SceneContainer backUrl={`/${topicId}`} controls={controls}>
             <Canvas camera={{ position: [0, 2, 12], fov: 60 }} style={{ width: '100%', height: '100%' }}>
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 10, 7.5]} intensity={0.8} />
@@ -341,14 +185,9 @@ export default function BanachTarski() {
                 <AnimationController isSplit={isSplit} progressRef={animationProgressRef} />
 
                 <OrbitControls enableDamping dampingFactor={0.05} />
-                <fog attach="fog" args={['#0a0a0f', 8, 25]} />
+                <fog attach="fog" args={['#0b0f19', 8, 25]} />
+                <color attach="background" args={['#0b0f19']} />
             </Canvas>
-
-            <InfoPanel
-                isSplit={isSplit}
-                onUnify={() => setIsSplit(false)}
-                onSplit={() => setIsSplit(true)}
-            />
-        </div>
+        </SceneContainer>
     );
 }

@@ -1,7 +1,10 @@
 import { useMemo, useRef, useLayoutEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { useParams } from 'react-router-dom';
 import * as THREE from 'three';
+import { SceneContainer } from '../../components/layout/SceneContainer';
+import { GlassPane } from '../../components/layout/GlassPane';
 
 const POINTS = (() => {
     const pts: { pos: [number, number, number]; classId: number }[] = [];
@@ -102,17 +105,48 @@ function DecisionPlaneEdge() {
 }
 
 export default function DecisionBoundaries() {
+    const { topicId } = useParams<{ topicId: string }>();
+
+    const controls = (
+        <GlassPane>
+            <div style={{ padding: '16px', color: 'white' }}>
+                <h3 style={{ margin: 0, marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+                    Decision Boundaries
+                </h3>
+                <div style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.5' }}>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#fdcb6e' }}>Yellow dots</span>: Class 0 data points
+                    </p>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#6c5ce7' }}>Purple dots</span>: Class 1 data points
+                    </p>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#00cec9' }}>Cyan plane</span>: Decision boundary
+                    </p>
+                    <p style={{ margin: '8px 0 0 0', fontSize: '12px', color: '#64748b' }}>
+                        Classifiers separate feature space into regions
+                    </p>
+                </div>
+            </div>
+        </GlassPane>
+    );
+
     return (
-        <Canvas camera={{ position: [4, 3, 4], fov: 50 }} style={{ width: '100%', height: '100%' }}>
-            <ambientLight intensity={0.4} />
-            <directionalLight position={[5, 5, 5]} intensity={0.8} />
-            <pointLight position={[-3, 2, 3]} intensity={0.5} color="#fdcb6e" />
-            <DataPoints />
-            <DecisionPlane />
-            <DecisionPlaneEdge />
-            <gridHelper args={[8, 16, '#222', '#181828']} position={[0, -3, 0]} />
-            <OrbitControls enableDamping dampingFactor={0.05} />
-            <fog attach="fog" args={['#0a0a0f', 5, 15]} />
-        </Canvas>
+        <SceneContainer
+            backUrl={`/${topicId || 'ml'}`}
+            controls={controls}
+        >
+            <Canvas camera={{ position: [4, 3, 4], fov: 50 }}>
+                <ambientLight intensity={0.4} />
+                <directionalLight position={[5, 5, 5]} intensity={0.8} />
+                <pointLight position={[-3, 2, 3]} intensity={0.5} color="#fdcb6e" />
+                <DataPoints />
+                <DecisionPlane />
+                <DecisionPlaneEdge />
+                <gridHelper args={[8, 16, '#222', '#181828']} position={[0, -3, 0]} />
+                <OrbitControls enableDamping dampingFactor={0.05} />
+                <fog attach="fog" args={['#050508', 5, 15]} />
+            </Canvas>
+        </SceneContainer>
     );
 }
