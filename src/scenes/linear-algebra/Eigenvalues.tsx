@@ -1,6 +1,6 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Line, Html } from '@react-three/drei';
+import { useState, useMemo, useEffect } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import { SceneContainer } from '../../components/layout/SceneContainer';
 import { GlassPane } from '../../components/layout/GlassPane';
@@ -52,8 +52,7 @@ function MathEquation({ matrix, vector, result, lambda, isEigen }: {
     lambda: number | null;
     isEigen: boolean;
 }) {
-    const format = (n: number) => n.toFixed(1).replace(/\.0$/, ''); // Clean numbers
-    const formatRes = (n: number) => n.toFixed(2).replace(/\.00$/, '');
+    const format = (n: number) => n.toFixed(1).replace(/\.0$/, '');
 
     const MatrixDisplay = ({ data, cols = 3 }: { data: number[], cols: number }) => (
         <div style={{

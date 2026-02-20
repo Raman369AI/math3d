@@ -62,6 +62,18 @@ body {
   width: 100vw;
 }
 
+/* KaTeX formulas: inherit text color so they're visible on dark backgrounds */
+.katex,
+.katex .mord,
+.katex .mbin,
+.katex .mrel,
+.katex .mopen,
+.katex .mclose,
+.katex .mpunct,
+.katex .minner {
+  color: inherit;
+}
+
 #root {
   height: 100vh;
   width: 100vw;

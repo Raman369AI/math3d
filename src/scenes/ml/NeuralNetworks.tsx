@@ -6,7 +6,7 @@ import { getNeuronPositions } from '../../utils/neural-network';
 import { SceneContainer } from '../../components/layout/SceneContainer';
 import { GlassPane } from '../../components/layout/GlassPane';
 import { useParams } from 'react-router-dom';
-import { Play, Pause, RefreshCcw } from 'lucide-react';
+import { Play, Pause } from 'lucide-react';
 
 function NeuronLayer({ count, x, color }: { count: number; x: number; color: string }) {
     const neurons = getNeuronPositions(count, x);
@@ -44,7 +44,7 @@ function Connections({ fromPositions, toPositions, color }: { fromPositions: [nu
 function AnimatedPulse({ isPlaying }: { isPlaying: boolean }) {
     const ref = useRef<THREE.Mesh>(null!);
 
-    useFrame((state, delta) => {
+    useFrame((state) => {
         if (!isPlaying) return;
         const t = state.clock.elapsedTime;
         const x = -3 + ((t * 1.5) % 9) - 1;

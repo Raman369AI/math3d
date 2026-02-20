@@ -236,7 +236,7 @@ export default function JacobianHessian() {
     const [showJacobian, setShowJacobian] = useState(true);
     const [showHessian, setShowHessian] = useState(true);
     const [autoRotate, setAutoRotate] = useState(false); // Default off to allow interaction
-    const [resetCount, setResetCount] = useState(0);
+    const [resetCount] = useState(0);
 
     const [dfdx, dfdy] = getJacobian(coords.x, coords.y);
     const h = getHessian(coords.x, coords.y);

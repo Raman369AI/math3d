@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { SceneContainer } from '../../components/layout/SceneContainer';
 import { GlassPane } from '../../components/layout/GlassPane';
 import { useParams } from 'react-router-dom';
-import { RefreshCcw, Split, Combine } from 'lucide-react';
+import { Split, Combine } from 'lucide-react';
 
 const PIECE_COUNT = 5;
 const COLORS = [0xef4444, 0x3b82f6, 0x10b981, 0xf59e0b, 0x8b5cf6];

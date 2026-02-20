@@ -163,6 +163,12 @@ export const topics: Topic[] = [
                 description: 'Watch random sampling converge to true probability values.',
                 component: lazyWithPreload(() => import('../scenes/probability/MonteCarlo')),
             },
+            {
+                id: 'log-likelihood',
+                title: 'Log-Likelihood',
+                description: 'Visualize how parameters maximize the probability of observing data.',
+                component: lazyWithPreload(() => import('../scenes/probability/LogLikelihood')),
+            },
         ],
     },
     {

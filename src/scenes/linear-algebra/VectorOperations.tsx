@@ -1,5 +1,5 @@
-import { useRef, useState, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { useState } from 'react';
+import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Text, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import { Arrow } from '../../components/3d/Arrow'; // Assuming arrow component exists
@@ -25,8 +25,6 @@ function AnimatedVectors({ vecA, vecB }: { vecA: [number, number, number], vecB:
     const vA = new THREE.Vector3(...vecA);
     const vB = new THREE.Vector3(...vecB);
     const vSum = new THREE.Vector3(...vecSum);
-    const origin = new THREE.Vector3(0, 0, 0);
-
     return (
         <group>
             {/* Vector A (Purple) */}

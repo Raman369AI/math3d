@@ -4,6 +4,67 @@ import * as THREE from 'three';
 import { ShieldCheck, Zap, BookOpen, Scale } from 'lucide-react';
 import Latex from '../../components/Latex';
 
+// --- Types ---
+type SigmaMode = 'atoms' | 'complement' | 'union' | 'universe';
+
+interface SigmaSceneProps {
+    level: number;
+    mode: SigmaMode;
+}
+
+// --- Sub-components ---
+
+function SigmaAtoms({ level }: { level: number }) {
+    const atomCount = Math.pow(2, level);
+    return (
+        <>
+            {Array.from({ length: atomCount }).map((_, i) => {
+                const phiStart = (i / atomCount) * Math.PI * 2;
+                const phiLength = (1 / atomCount) * Math.PI * 2 * 0.85;
+                const hue = (i / atomCount) * 360;
+                return (
+                    <mesh key={i}>
+                        <sphereGeometry args={[2.1, 32, 32, phiStart, phiLength, 0, Math.PI]} />
+                        <meshPhongMaterial
+                            color={`hsl(${hue}, 70%, 60%)`}
+                            side={THREE.DoubleSide}
+                            transparent
+                            opacity={0.8}
+                        />
+                    </mesh>
+                );
+            })}
+        </>
+    );
+}
+
+function SigmaComplement() {
+    return (
+        <>
+            {/* Original set (blue) */}
+            <mesh>
+                <sphereGeometry args={[2.1, 32, 32, 0, Math.PI, 0, Math.PI]} />
+                <meshPhongMaterial
+                    color={0x3b82f6}
+                    side={THREE.DoubleSide}
+                    transparent
+                    opacity={0.8}
+                />
+            </mesh>
+            {/* Complement (red) */}
+            <mesh>
+                <sphereGeometry args={[2.1, 32, 32, Math.PI, Math.PI, 0, Math.PI]} />
+                <meshPhongMaterial
+                    color={0xef4444}
+                    side={THREE.DoubleSide}
+                    transparent
+                    opacity={0.8}
+                />
+            </mesh>
+        </>
+    );
+}
+
 function SigmaUnion() {
     return (
         <>
@@ -56,9 +117,9 @@ function SigmaScene({ level, mode }: SigmaSceneProps) {
             <mesh>
                 <sphereGeometry args={[2, 32, 32]} />
                 <meshPhongMaterial
-                    color={0xe2e8f0}
+                    color={0x94a3b8}
                     transparent
-                    opacity={0.1}
+                    opacity={0.2}
                     wireframe
                 />
             </mesh>
@@ -247,17 +308,17 @@ export default function SigmaAlgebra() {
                 }}
             >
                 <Canvas camera={{ position: [0, 0, 6], fov: 75 }} style={{ width: '100%', height: '100%' }}>
-                    <color attach="background" args={['#f8fafc']} />
+                    <color attach="background" args={['#0a0a0f']} />
                     <SigmaScene level={sigmaLevel} mode={sigmaMode} />
                 </Canvas>
                 <div
                     style={{
                         padding: '16px 20px',
-                        background: '#e2e8f0',
-                        border: '1px solid #cbd5e1',
+                        background: 'rgba(15, 23, 42, 0.6)',
+                        border: '1px solid #334155',
                         borderRadius: '12px',
                         fontSize: '13px',
-                        color: '#334155',
+                        color: '#cbd5e1',
                         lineHeight: 1.6,
                         margin: '16px',
                     }}

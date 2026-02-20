@@ -1,6 +1,6 @@
 import { useRef, useMemo, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere, Html } from '@react-three/drei';
+import { OrbitControls, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 import { Play, Pause, RefreshCcw } from 'lucide-react';
 import { SceneContainer } from '../../components/layout/SceneContainer';
@@ -50,7 +50,7 @@ function DescentBall({ isPlaying, onReset }: { isPlaying: boolean, onReset: numb
     const ref = useRef<THREE.Mesh>(null!);
     const timeRef = useRef(0);
 
-    useFrame((state, delta) => {
+    useFrame((_, delta) => {
         if (isPlaying) {
             timeRef.current += delta;
         }
