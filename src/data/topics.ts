@@ -169,6 +169,12 @@ export const topics: Topic[] = [
                 description: 'Visualize how parameters maximize the probability of observing data.',
                 component: lazyWithPreload(() => import('../scenes/probability/LogLikelihood')),
             },
+            {
+                id: 'probability-vs-likelihood',
+                title: 'Probability vs Likelihood',
+                description: 'Explore the 3D Gaussian surface f(b|x) for b = Ax + ε. Slice it as a probability distribution (forward) or a likelihood function (inverse) to find the MLE.',
+                component: lazyWithPreload(() => import('../scenes/probability/ProbabilityVsLikelihood')),
+            },
         ],
     },
     {
@@ -201,6 +207,24 @@ export const topics: Topic[] = [
                 title: 'Measure Theory in ML',
                 description: 'Why "size" and "sets" matter: Manifolds, Normalizing Flows, and ReLU singularities.',
                 component: lazyWithPreload(() => import('../scenes/ml/MeasureTheoryML')),
+            },
+            {
+                id: 'lagrange-constraints',
+                title: 'Ridge & Lasso Constraints',
+                description: 'Visualize regularization as a budget constraint: see how Ridge (L2) and Lasso (L1) penalties shrink model weights in 3D.',
+                component: lazyWithPreload(() => import('../scenes/ml/LagrangeConstraints')),
+            },
+            {
+                id: 'lp-regularization',
+                title: 'Lp Norm Balls',
+                description: 'Explore the full Lp norm family (L1, L2, L3, L∞) as interactive 3D constraint regions. Drag the OLS solution and watch how each penalty projects it differently.',
+                component: lazyWithPreload(() => import('../scenes/ml/LpRegularization')),
+            },
+            {
+                id: 'linear-models',
+                title: 'Linear Models for Classification',
+                description: 'Draw your own training data and watch Logistic Regression, Least Squares, and the Perceptron learn a decision boundary in real time.',
+                component: lazyWithPreload(() => import('../scenes/ml/LinearModels')),
             },
         ],
     },
