@@ -226,6 +226,12 @@ export const topics: Topic[] = [
                 description: 'Draw your own training data and watch Logistic Regression, Least Squares, and the Perceptron learn a decision boundary in real time.',
                 component: lazyWithPreload(() => import('../scenes/ml/LinearModels')),
             },
+            {
+                id: 'linear-discriminants',
+                title: 'Linear Discriminant Geometry',
+                description: 'Visualize the geometric relationship between the weight vector w, bias w₀, and the decision boundary. Drag the test point to see the signed perpendicular distance r.',
+                component: lazyWithPreload(() => import('../scenes/ml/LinearDiscriminants')),
+            },
         ],
     },
 ];
