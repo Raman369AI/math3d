@@ -102,7 +102,7 @@ export default function NeuralNetworks() {
     const controls = (
         <GlassPane className="scene-controls" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-                <h1 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white' }}>Neural Network</h1>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white', margin: 0 }}>Neural Network</h3>
                 <p style={{ fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>Feed Forward</p>
             </div>
 
@@ -119,7 +119,7 @@ export default function NeuralNetworks() {
 
     return (
         <SceneContainer backUrl={`/${topicId}`} controls={controls}>
-            <Canvas camera={{ position: [0, 0, 8], fov: 50 }} style={{ width: '100%', height: '100%' }}>
+            <Canvas camera={{ position: [0, 0, 8], fov: 50 }} style={{ width: '100%', height: '100%' }} aria-label="3D visualization of a feed-forward neural network with signal propagation">
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 10, 5]} intensity={0.8} />
                 <NetworkScene isPlaying={isPlaying} />

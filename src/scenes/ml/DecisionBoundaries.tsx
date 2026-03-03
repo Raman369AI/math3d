@@ -136,7 +136,7 @@ export default function DecisionBoundaries() {
             backUrl={`/${topicId || 'ml'}`}
             controls={controls}
         >
-            <Canvas camera={{ position: [4, 3, 4], fov: 50 }}>
+            <Canvas camera={{ position: [4, 3, 4], fov: 50 }} aria-label="3D visualization of classifier decision boundary separating two point clusters">
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 5, 5]} intensity={0.8} />
                 <pointLight position={[-3, 2, 3]} intensity={0.5} color="#fdcb6e" />

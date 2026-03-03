@@ -235,7 +235,7 @@ export default function MeasureTheoryML() {
             {/* Main Content: 3D + Info */}
             <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
 
-                <Canvas camera={{ position: [5, 5, 5], fov: 50 }}>
+                <Canvas camera={{ position: [5, 5, 5], fov: 50 }} aria-label="3D visualization of measure theory concepts in machine learning">
                     <ambientLight intensity={0.5} />
                     <pointLight position={[10, 10, 10]} intensity={1} />
                     <OrbitControls makeDefault enableDamping dampingFactor={0.05} />

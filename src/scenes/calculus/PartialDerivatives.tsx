@@ -213,7 +213,7 @@ export default function PartialDerivatives() {
 
     return (
         <SceneContainer backUrl={`/${topicId}`} controls={controls}>
-            <Canvas dpr={[1, 1.5]} shadows>
+            <Canvas dpr={[1, 1.5]} shadows aria-label="3D visualization of partial derivatives showing how functions change along individual axes">
                 <PerspectiveCamera makeDefault position={[8, 6, 8]} fov={50} />
                 <color attach="background" args={['#0b0f19']} />
                 <ambientLight intensity={0.5} />

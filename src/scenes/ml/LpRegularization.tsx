@@ -385,7 +385,7 @@ export default function LpRegularization() {
 
     return (
         <SceneContainer backUrl={`/${topicId || 'ml'}`} controls={controls}>
-            <Canvas dpr={[1, 1.5]} camera={{ position: [7.5, 7.5, 7.5], fov: 45 }}>
+            <Canvas dpr={[1, 1.5]} camera={{ position: [7.5, 7.5, 7.5], fov: 45 }} aria-label="3D visualization of Lp norm balls showing L1, L2, L3, and L-infinity constraint regions">
                 <Scene pValue={pValue} radius={radius} olsVec={olsVec} regVec={regVec} />
             </Canvas>
         </SceneContainer>

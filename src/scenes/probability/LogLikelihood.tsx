@@ -232,7 +232,7 @@ export default function LogLikelihood() {
 
     return (
         <SceneContainer backUrl={`/${topicId}`} controls={controls}>
-            <Canvas dpr={[1, 1.5]} shadows camera={{ position: [12, 10, 12], fov: 45 }}>
+            <Canvas dpr={[1, 1.5]} shadows camera={{ position: [12, 10, 12], fov: 45 }} aria-label="3D visualization of log-likelihood surface with maximum likelihood estimation">
                 <color attach="background" args={['#0b0f19']} />
                 <fog attach="fog" args={['#0b0f19', 15, 30]} />
 

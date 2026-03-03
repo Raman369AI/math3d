@@ -199,17 +199,18 @@ export default function RiemannVsLebesgue() {
                     fontFamily: 'Inter, system-ui, sans-serif',
                 }}
             >
-                <h1
+                <h3
                     style={{
                         fontSize: '24px',
                         fontWeight: 900,
                         marginBottom: '4px',
                         fontStyle: 'italic',
                         letterSpacing: '-0.02em',
+                        margin: 0,
                     }}
                 >
                     Spikes & Slices
-                </h1>
+                </h3>
                 <p
                     style={{
                         color: '#94a3b8',
@@ -417,6 +418,7 @@ export default function RiemannVsLebesgue() {
             <Canvas
                 camera={{ position: [20, 18, 20], fov: 60 }}
                 style={{ width: '100%', height: '100%' }}
+                aria-label="3D comparison of Riemann and Lebesgue integration approaches with vertical and horizontal slicing"
             >
                 <color attach="background" args={['#050508']} />
                 <Scene mode={mode} functionType={functionType} resolution={resolution} />

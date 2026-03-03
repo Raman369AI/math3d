@@ -304,7 +304,7 @@ export default function JacobianHessian() {
 
     return (
         <SceneContainer backUrl={`/${topicId}`} controls={controls}>
-            <Canvas dpr={[1, 1.5]} shadows camera={{ position: [5, 5, 5], fov: 75 }}>
+            <Canvas dpr={[1, 1.5]} shadows camera={{ position: [5, 5, 5], fov: 75 }} aria-label="3D visualization comparing Jacobian gradient and Hessian curvature on a surface">
                 <color attach="background" args={['#0b0f19']} />
 
                 <ambientLight intensity={0.6} />

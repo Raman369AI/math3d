@@ -1,7 +1,10 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, Line } from '@react-three/drei';
+import { useParams } from 'react-router-dom';
 import * as THREE from 'three';
+import { SceneContainer } from '../../components/layout/SceneContainer';
+import { GlassPane } from '../../components/layout/GlassPane';
 
 function LossLandscape() {
     const geometry = useMemo(() => {
@@ -41,10 +44,11 @@ function LossLandscape() {
 
 function DescentPath() {
     const ballRef = useRef<THREE.Mesh>(null!);
-    const lineRef = useRef<any>(null!);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const lineRef = useRef<any>(null);
     const trailRef = useRef<[number, number, number][]>([]);
 
-    const flatPoints = useMemo(() => new Float32Array(61 * 3), []);
+    const flatPointsRef = useRef(new Float32Array(61 * 3));
     const initialPoints = useMemo(
         () => new Array(61).fill([0, 0, 0]) as [number, number, number][],
         []
@@ -76,11 +80,12 @@ function DescentPath() {
 
                 for (let i = 0; i < 61; i++) {
                     const p = i < fillCount ? firstPoint : points[i - fillCount];
-                    flatPoints[i * 3] = p[0];
-                    flatPoints[i * 3 + 1] = p[1];
-                    flatPoints[i * 3 + 2] = p[2];
+                    flatPointsRef.current[i * 3] = p[0];
+                    flatPointsRef.current[i * 3 + 1] = p[1];
+                    flatPointsRef.current[i * 3 + 2] = p[2];
                 }
-                lineRef.current.geometry.setPositions(flatPoints);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (lineRef.current as any).geometry.setPositions(flatPointsRef.current);
             }
         }
     });
@@ -103,15 +108,44 @@ function DescentPath() {
 }
 
 export default function GradientDescentML() {
+    const { topicId } = useParams<{ topicId: string }>();
+
+    const controls = (
+        <GlassPane>
+            <div style={{ padding: '16px', color: 'white' }}>
+                <h3 style={{ margin: 0, marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+                    Gradient Descent
+                </h3>
+                <div style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.5' }}>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#fdcb6e' }}>Gold surface</span>: Multi-modal loss landscape with local minima
+                    </p>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#fd79a8' }}>Pink ball</span>: Parameter vector spiraling toward the minimum
+                    </p>
+                    <p style={{ margin: 0, marginBottom: '8px' }}>
+                        <span style={{ color: '#fd79a8' }}>Pink trail</span>: Optimization path taken
+                    </p>
+                    <p style={{ margin: '8px 0 0 0', fontSize: '12px', color: '#64748b' }}>
+                        The ball navigates a non-convex landscape, illustrating how gradient descent can get trapped in local minima
+                    </p>
+                </div>
+            </div>
+        </GlassPane>
+    );
+
     return (
-        <Canvas camera={{ position: [5, 5, 5], fov: 50 }} style={{ width: '100%', height: '100%' }}>
-            <ambientLight intensity={0.4} />
-            <directionalLight position={[5, 5, 5]} intensity={0.8} />
-            <pointLight position={[-3, 2, 3]} intensity={0.5} color="#fdcb6e" />
-            <LossLandscape />
-            <DescentPath />
-            <OrbitControls enableDamping dampingFactor={0.05} />
-            <fog attach="fog" args={['#050508', 6, 18]} />
-        </Canvas>
+        <SceneContainer backUrl={`/${topicId || 'ml'}`} controls={controls}>
+            <Canvas camera={{ position: [5, 5, 5], fov: 50 }} style={{ width: '100%', height: '100%' }} aria-label="3D visualization of gradient descent on a non-convex loss landscape">
+                <ambientLight intensity={0.4} />
+                <directionalLight position={[5, 5, 5]} intensity={0.8} />
+                <pointLight position={[-3, 2, 3]} intensity={0.5} color="#fdcb6e" />
+                <LossLandscape />
+                <DescentPath />
+                <OrbitControls enableDamping dampingFactor={0.05} />
+                <fog attach="fog" args={['#0b0f19', 6, 18]} />
+                <color attach="background" args={['#0b0f19']} />
+            </Canvas>
+        </SceneContainer>
     );
 }

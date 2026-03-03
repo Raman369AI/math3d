@@ -47,6 +47,7 @@ export default function SimpleTest() {
                 camera={{ position: [5, 5, 5], fov: 45 }}
                 gl={{ antialias: true, alpha: false }}
                 dpr={[1, 2]}
+                aria-label="Simple WebGL test scene with a rotating cube"
             >
                 <ambientLight intensity={0.5} />
                 <directionalLight position={[10, 10, 5]} intensity={1} />

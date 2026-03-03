@@ -232,6 +232,12 @@ export const topics: Topic[] = [
                 description: 'Visualize the geometric relationship between the weight vector w, bias w₀, and the decision boundary. Drag the test point to see the signed perpendicular distance r.',
                 component: lazyWithPreload(() => import('../scenes/ml/LinearDiscriminants')),
             },
+            {
+                id: 'least-squares-multiclass',
+                title: '1-of-K Least Squares',
+                description: 'Visualize how 1-of-K encoding fits a separate linear model per class. Use Target View to see what each line is trying to fit, and watch argmax carve out decision regions.',
+                component: lazyWithPreload(() => import('../scenes/ml/LeastSquaresMulticlass')),
+            },
         ],
     },
 ];

@@ -105,7 +105,7 @@ export default function FundamentalSubspaces() {
     const controls = (
         <GlassPane className="scene-controls" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-                <h1 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white' }}>Fundamental Subspaces</h1>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white', margin: 0 }}>Fundamental Subspaces</h3>
                 <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.6 }}>
                     Every m×n matrix A defines 4 fundamental subspaces that come in two orthogonal pairs.
                 </p>
@@ -176,6 +176,7 @@ export default function FundamentalSubspaces() {
                 camera={{ position: [20, 14, 20], fov: 45 }}
                 style={{ width: '100%', height: '100%' }}
                 dpr={[1, 1.5]}
+                aria-label="3D visualization of the four fundamental subspaces of a matrix"
             >
                 <SceneBase />
                 {mode === 'domain' ? <DomainView /> : <CodomainView />}

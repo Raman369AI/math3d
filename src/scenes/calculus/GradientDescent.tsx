@@ -91,7 +91,7 @@ export default function GradientDescent() {
     const controls = (
         <GlassPane className="scene-controls" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-                <h1 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white' }}>Gradient Descent</h1>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white', margin: 0 }}>Gradient Descent</h3>
                 <p style={{ fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>Loss = 0.5 * (x² + y²)</p>
             </div>
 
@@ -114,7 +114,7 @@ export default function GradientDescent() {
 
     return (
         <SceneContainer backUrl={`/${topicId}`} controls={controls}>
-            <Canvas camera={{ position: [5, 5, 5], fov: 50 }} style={{ width: '100%', height: '100%' }}>
+            <Canvas camera={{ position: [5, 5, 5], fov: 50 }} style={{ width: '100%', height: '100%' }} aria-label="3D visualization of gradient descent on a quadratic loss surface">
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 10, 5]} intensity={1.0} />
                 <pointLight position={[-3, 5, 3]} intensity={0.5} color="#00cec9" />

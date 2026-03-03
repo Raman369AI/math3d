@@ -59,7 +59,7 @@ export default function VectorOperations() {
     const controls = (
         <GlassPane className="scene-controls" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-                <h1 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white' }}>Vector Addition</h1>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white', margin: 0 }}>Vector Addition</h3>
                 <p style={{ fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>Parallelogram Rule</p>
             </div>
 
@@ -113,7 +113,7 @@ export default function VectorOperations() {
 
     return (
         <SceneContainer backUrl={`/${topicId}`} controls={controls}>
-            <Canvas camera={{ position: [5, 5, 5], fov: 50 }} style={{ width: '100%', height: '100%' }}>
+            <Canvas camera={{ position: [5, 5, 5], fov: 50 }} style={{ width: '100%', height: '100%' }} aria-label="3D visualization of vector addition using the parallelogram rule">
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 10, 5]} intensity={1.0} />
 

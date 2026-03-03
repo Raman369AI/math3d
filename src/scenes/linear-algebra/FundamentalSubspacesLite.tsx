@@ -54,7 +54,7 @@ export default function FundamentalSpacesOptimized() {
     const controls = (
         <GlassPane className="scene-controls" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-                <h1 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white' }}>Fundamental Subspaces</h1>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px', color: 'white', margin: 0 }}>Fundamental Subspaces</h3>
                 <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.6 }}>
                     Lite Version (Reduced GPU Load)
                 </p>

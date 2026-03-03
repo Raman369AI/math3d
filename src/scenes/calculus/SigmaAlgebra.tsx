@@ -307,7 +307,7 @@ export default function SigmaAlgebra() {
                     height: '50vh',
                 }}
             >
-                <Canvas camera={{ position: [0, 0, 6], fov: 75 }} style={{ width: '100%', height: '100%' }}>
+                <Canvas camera={{ position: [0, 0, 6], fov: 75 }} style={{ width: '100%', height: '100%' }} aria-label="3D visualization of sigma-algebra and measure theory concepts">
                     <color attach="background" args={['#0a0a0f']} />
                     <SigmaScene level={sigmaLevel} mode={sigmaMode} />
                 </Canvas>

@@ -176,7 +176,7 @@ export default function BanachTarski() {
 
     return (
         <SceneContainer backUrl={`/${topicId}`} controls={controls}>
-            <Canvas camera={{ position: [0, 2, 12], fov: 60 }} style={{ width: '100%', height: '100%' }}>
+            <Canvas camera={{ position: [0, 2, 12], fov: 60 }} style={{ width: '100%', height: '100%' }} aria-label="3D visualization of the Banach-Tarski paradox decomposing a sphere into two">
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 10, 7.5]} intensity={0.8} />
                 <pointLight position={[-5, -5, 5]} color="#3b82f6" intensity={0.5} />

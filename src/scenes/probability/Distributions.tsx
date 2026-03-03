@@ -100,7 +100,7 @@ export default function Distributions() {
             backUrl={`/${topicId || 'probability'}`}
             controls={controls}
         >
-            <Canvas camera={{ position: [4, 4, 4], fov: 50 }}>
+            <Canvas camera={{ position: [4, 4, 4], fov: 50 }} aria-label="3D Gaussian probability distribution surface with random sample points">
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 5, 5]} intensity={0.8} />
                 <pointLight position={[-3, 2, 3]} intensity={0.5} color="#fd79a8" />

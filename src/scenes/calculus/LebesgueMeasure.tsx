@@ -28,11 +28,11 @@ function MeasureBox({ dim }: { dim: number }) {
             [-hx, -hy, hz], [hx, -hy, hz], [hx, hy, hz], [-hx, hy, hz],
         ] as [number, number, number][];
         const pairs = [
-            [0,1],[1,2],[2,3],[3,0], // back face
-            [4,5],[5,6],[6,7],[7,4], // front face
-            [0,4],[1,5],[2,6],[3,7], // connecting
+            [0, 1], [1, 2], [2, 3], [3, 0], // back face
+            [4, 5], [5, 6], [6, 7], [7, 4], // front face
+            [0, 4], [1, 5], [2, 6], [3, 7], // connecting
         ];
-        return pairs.map(([a, b]) => [corners[a], corners[b]] as [[number,number,number],[number,number,number]]);
+        return pairs.map(([a, b]) => [corners[a], corners[b]] as [[number, number, number], [number, number, number]]);
     }, []);
 
     return (
@@ -84,9 +84,9 @@ function MeasureBox({ dim }: { dim: number }) {
             </Html>
 
             {/* Highlight active dimensions */}
-            {dim >= 1 && <Line points={[[-sx/2, -sy/2, -sz/2], [sx/2, -sy/2, -sz/2]]} color="#f87171" lineWidth={4} />}
-            {dim >= 2 && <Line points={[[sx/2, -sy/2, -sz/2], [sx/2, sy/2, -sz/2]]} color="#34d399" lineWidth={4} />}
-            {dim >= 3 && <Line points={[[sx/2, -sy/2, -sz/2], [sx/2, -sy/2, sz/2]]} color="#fbbf24" lineWidth={4} />}
+            {dim >= 1 && <Line points={[[-sx / 2, -sy / 2, -sz / 2], [sx / 2, -sy / 2, -sz / 2]]} color="#f87171" lineWidth={4} />}
+            {dim >= 2 && <Line points={[[sx / 2, -sy / 2, -sz / 2], [sx / 2, sy / 2, -sz / 2]]} color="#34d399" lineWidth={4} />}
+            {dim >= 3 && <Line points={[[sx / 2, -sy / 2, -sz / 2], [sx / 2, -sy / 2, sz / 2]]} color="#fbbf24" lineWidth={4} />}
         </group>
     );
 }
@@ -425,7 +425,7 @@ export default function LebesgueMeasure() {
 
     return (
         <SceneContainer backUrl={`/${topicId}`} controls={controls}>
-            <Canvas camera={{ position: [5, 4, 5], fov: 45 }} style={{ width: '100%', height: '100%' }}>
+            <Canvas camera={{ position: [5, 4, 5], fov: 45 }} style={{ width: '100%', height: '100%' }} aria-label="3D visualization of Lebesgue measure properties including outer measure and covering">
                 <SceneLighting />
                 <gridHelper args={[10, 20, '#1e293b', '#0f172a']} position={[0, -0.01, 0]} />
 

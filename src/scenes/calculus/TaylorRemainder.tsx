@@ -375,6 +375,7 @@ export default function TaylorRemainder() {
                 camera={{ position: [12, 8, 12], fov: 50 }}
                 dpr={[1, 1.5]}
                 gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
+                aria-label="3D visualization of Taylor series remainder showing error between original function and polynomial approximation"
             >
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 10, 7]} intensity={0.8} />

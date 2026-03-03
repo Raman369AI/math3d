@@ -80,7 +80,7 @@ export default function Integrals() {
             backUrl={`/${topicId || 'calculus'}`}
             controls={controls}
         >
-            <Canvas camera={{ position: [3, 3, 4], fov: 50 }}>
+            <Canvas camera={{ position: [3, 3, 4], fov: 50 }} aria-label="3D animated Riemann sum bars approximating area under a curve">
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[5, 5, 5]} intensity={0.8} />
                 <pointLight position={[-3, 2, 3]} intensity={0.5} color="#00cec9" />

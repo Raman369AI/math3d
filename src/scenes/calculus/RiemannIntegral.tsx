@@ -286,7 +286,7 @@ export default function RiemannIntegral() {
                     bottom: 0,
                 }}
             >
-                <Canvas camera={{ position: [0, 4, 8], fov: 75 }} style={{ width: '100%', height: '100%' }}>
+                <Canvas camera={{ position: [0, 4, 8], fov: 75 }} style={{ width: '100%', height: '100%' }} aria-label="3D visualization of Riemann integral with domain partitioning">
                     <color attach="background" args={['#050508']} />
                     <RiemannScene nPartitions={riemannN} />
                 </Canvas>

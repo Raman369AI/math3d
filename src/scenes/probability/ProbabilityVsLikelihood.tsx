@@ -412,6 +412,7 @@ export default function ProbabilityVsLikelihood() {
             <Canvas
                 dpr={[1, 1.5]}
                 camera={{ position: [10, 8, 10], fov: 55 }}
+                aria-label="3D Gaussian surface showing probability distribution vs likelihood function for linear model"
             >
                 <Scene mode={mode} />
             </Canvas>
