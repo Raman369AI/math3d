@@ -238,6 +238,18 @@ export const topics: Topic[] = [
                 description: 'Visualize how 1-of-K encoding fits a separate linear model per class. Use Target View to see what each line is trying to fit, and watch argmax carve out decision regions.',
                 component: lazyWithPreload(() => import('../scenes/ml/LeastSquaresMulticlass')),
             },
+            {
+                id: 'lagrange-multipliers',
+                title: 'Lagrange Multipliers',
+                description: 'Minimize f(x,y) = x² + y² subject to x + y = 4. Watch the gradient vectors ∇f and ∇g align at the constrained optimum — the geometric heart of Lagrange theory.',
+                component: lazyWithPreload(() => import('../scenes/ml/LagrangeMultipliers')),
+            },
+            {
+                id: 'fisher-lda',
+                title: "Fisher's Linear Discriminant",
+                description: 'Step-by-step derivation of Fisher\'s LDA: see why w ∝ S_W⁻¹(m₂ − m₁) maximises class separation, project data onto the optimal axis, and classify new points interactively.',
+                component: lazyWithPreload(() => import('../scenes/ml/FisherLDA')),
+            },
         ],
     },
 ];
