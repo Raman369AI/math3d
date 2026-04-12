@@ -34,16 +34,26 @@ interface Pt { x: number; y: number }
 const CLASS1: Pt[] = Array.from({ length: 30 }, () => ({ x: randNorm(160, 35), y: randNorm(250, 40) }));
 const CLASS2: Pt[] = Array.from({ length: 30 }, () => ({ x: randNorm(340, 35), y: randNorm(160, 40) }));
 
-const m1: Pt = { x: CLASS1.reduce((s, p) => s + p.x, 0) / CLASS1.length, y: CLASS1.reduce((s, p) => s + p.y, 0) / CLASS1.length };
-const m2: Pt = { x: CLASS2.reduce((s, p) => s + p.x, 0) / CLASS2.length, y: CLASS2.reduce((s, p) => s + p.y, 0) / CLASS2.length };
-
-// Within-class scatter
-const sw1xx = CLASS1.reduce((s, p) => s + (p.x - m1.x) ** 2, 0) / CLASS1.length;
-const sw1yy = CLASS1.reduce((s, p) => s + (p.y - m1.y) ** 2, 0) / CLASS1.length;
-const sw1xy = CLASS1.reduce((s, p) => s + (p.x - m1.x) * (p.y - m1.y), 0) / CLASS1.length;
-const sw2xx = CLASS2.reduce((s, p) => s + (p.x - m2.x) ** 2, 0) / CLASS2.length;
-const sw2yy = CLASS2.reduce((s, p) => s + (p.y - m2.y) ** 2, 0) / CLASS2.length;
-const sw2xy = CLASS2.reduce((s, p) => s + (p.x - m2.x) * (p.y - m2.y), 0) / CLASS2.length;
+function getStats(pts: Pt[]) {
+    let sx = 0, sy = 0, sxx = 0, syy = 0, sxy = 0;
+    const n = pts.length;
+    for (let i = 0; i < n; i++) {
+        const p = pts[i];
+        sx += p.x; sy += p.y;
+        sxx += p.x * p.x; syy += p.y * p.y; sxy += p.x * p.y;
+    }
+    const mx = sx / n, my = sy / n;
+    return {
+        m: { x: mx, y: my },
+        sxx: (sxx - (sx * sx) / n) / n,
+        syy: (syy - (sy * sy) / n) / n,
+        sxy: (sxy - (sx * sy) / n) / n,
+    };
+}
+const stats1 = getStats(CLASS1), stats2 = getStats(CLASS2);
+const m1 = stats1.m, m2 = stats2.m;
+const sw1xx = stats1.sxx, sw1yy = stats1.syy, sw1xy = stats1.sxy;
+const sw2xx = stats2.sxx, sw2yy = stats2.syy, sw2xy = stats2.sxy;
 const Sxx = sw1xx + sw2xx, Syy = sw1yy + sw2yy, Sxy = sw1xy + sw2xy;
 
 const det = Sxx * Syy - Sxy * Sxy;
@@ -59,10 +69,20 @@ function project(p: Pt) { return p.x * wx + p.y * wy; }
 
 const proj1 = CLASS1.map(project);
 const proj2 = CLASS2.map(project);
-const mu1p = proj1.reduce((s, v) => s + v, 0) / proj1.length;
-const mu2p = proj2.reduce((s, v) => s + v, 0) / proj2.length;
-const sig1p = Math.sqrt(proj1.reduce((s, v) => s + (v - mu1p) ** 2, 0) / proj1.length);
-const sig2p = Math.sqrt(proj2.reduce((s, v) => s + (v - mu2p) ** 2, 0) / proj2.length);
+
+function get1DStats(vals: number[]) {
+    let s = 0, ss = 0;
+    const n = vals.length;
+    for (let i = 0; i < n; i++) {
+        const v = vals[i];
+        s += v; ss += v * v;
+    }
+    const mu = s / n;
+    const sig = Math.sqrt(Math.max(0, (ss - (s * s) / n) / n));
+    return { mu, sig };
+}
+const pstats1 = get1DStats(proj1), pstats2 = get1DStats(proj2);
+const mu1p = pstats1.mu, mu2p = pstats2.mu, sig1p = pstats1.sig, sig2p = pstats2.sig;
 const y0 = (mu1p * sig2p + mu2p * sig1p) / (sig1p + sig2p);
 
 // ---------------------------------------------------------------------------
