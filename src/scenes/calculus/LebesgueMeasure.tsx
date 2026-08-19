@@ -122,7 +122,7 @@ function OuterMeasureScene({ resolution }: { resolution: number }) {
         return result;
     }, [resolution]);
 
-    const totalVolume = boxes.reduce((acc, b) => acc + Math.pow(b.size, 3), 0);
+    const totalVolume = boxes.reduce((acc, b) => acc + (b.size * b.size * b.size), 0);
 
     return (
         <group ref={groupRef}>
